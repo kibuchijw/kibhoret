@@ -6,6 +6,13 @@
 npm i
 ```
 
+or
+
+```
+npm install
+
+```
+
 2. After the packages have installed, you can code away.
 3. To run the server, use:
 
