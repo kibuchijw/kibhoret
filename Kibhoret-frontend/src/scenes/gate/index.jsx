@@ -42,7 +42,7 @@ const Gate = () => {
     },
   ];
 
-  function valuetext(value: number) {
+  function valuetext(value) {
     return `${value}% clean`;
   }
 

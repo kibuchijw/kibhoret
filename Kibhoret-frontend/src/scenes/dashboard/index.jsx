@@ -57,7 +57,7 @@ const Dashboard = () => {
                 width="50px"
                 height="50px"
                 display="flex"
-                src={`../../assets/truck.png`}
+                src={`/src/assets/truck.png`}
               />
             }
           />
@@ -78,7 +78,7 @@ const Dashboard = () => {
                 width="50px"
                 height="50px"
                 display="flex"
-                src={`../../assets/gate.svg`}
+                src={`src/assets/gate.svg`}
                 color="colors.greenAccent[600]"
               />
             }
@@ -100,7 +100,7 @@ const Dashboard = () => {
                 width="50px"
                 height="50px"
                 display="flex"
-                src={`../../assets/balance-scale.svg`}
+                src={`src/assets/balance-scale.svg`}
                 color="colors.greenAccent[600]"
               />
             }
@@ -125,7 +125,7 @@ const Dashboard = () => {
                 width="50px"
                 height="50px"
                 display="flex"
-                src={`../../assets/sampling.svg`}
+                src={`src/assets/sampling.svg`}
                 color="colors.greenAccent[600]"
               />
             }
@@ -148,7 +148,7 @@ const Dashboard = () => {
                 width="50px"
                 height="50px"
                 display="flex"
-                src={`../../assets/lab.svg`}
+                src={`src/assets/lab.svg`}
                 color="colors.greenAccent[600]"
               />
             }
@@ -170,7 +170,7 @@ const Dashboard = () => {
                 width="50px"
                 height="50px"
                 display="flex"
-                src={`../../assets/tanker.svg`}
+                src={`src/assets/tanker.svg`}
                 color="colors.greenAccent[600]"
               />
             }
