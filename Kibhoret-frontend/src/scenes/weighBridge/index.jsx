@@ -5,7 +5,7 @@ import Header from "../../components/Header";
 
 import StatBox from "../../components/StatBox";
 
-const Gate = () => {
+const WeighBridge = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
@@ -13,7 +13,10 @@ const Gate = () => {
     <Box m="20px">
       {/* HEADER */}
       <Box display="flex" justifyContent="space-between" alignItems="center">
-        <Header title="GATE RECORDS" subtitle="Please select in or out" />
+        <Header
+          title="WEIGHBRIDGE RECORDS"
+          subtitle="Please select in or out"
+        />
       </Box>
 
       {/* GRID & CHARTS */}
@@ -73,4 +76,4 @@ const Gate = () => {
   );
 };
 
-export default Gate;
+export default WeighBridge;

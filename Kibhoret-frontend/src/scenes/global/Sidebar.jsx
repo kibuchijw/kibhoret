@@ -137,35 +137,35 @@ const Sidebar = () => {
             />
             <Item
               title="Weighbridge"
-              to="/invoices"
+              to="/weighbridge"
               icon={<ScaleIcon />}
               selected={selected}
               setSelected={setSelected}
             />
             <Item
               title="Sampling"
-              to="/form"
+              to="/sampling"
               icon={<ScienceIcon />}
               selected={selected}
               setSelected={setSelected}
             />
             <Item
               title="Lab"
-              to="/calendar"
+              to="/lab"
               icon={<BiotechIcon />}
               selected={selected}
               setSelected={setSelected}
             />
             <Item
               title="Truck Offloading"
-              to="/bar"
+              to="/offloading"
               icon={<Battery0BarIcon />}
               selected={selected}
               setSelected={setSelected}
             />
             <Item
               title="Metrics"
-              to="/pie"
+              to="/metrics"
               icon={<QueryStatsIcon />}
               selected={selected}
               setSelected={setSelected}
