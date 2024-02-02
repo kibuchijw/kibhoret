@@ -16,14 +16,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from api.models import GateEntryResource
+# from api.models import GateEntryResource
 
 
-gate_resource = GateEntryResource()
+# gate_resource = GateEntryResource()
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('backend/', include('backend.urls')),
-    path('api/', include(gate_resource.urls))
+    path('api/', include('api.urls'))
 ]
