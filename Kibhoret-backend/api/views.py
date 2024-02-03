@@ -27,7 +27,7 @@ class GeneralInfos(APIView):
 #         return Response(serialized_infos.data)
 
 
-class WeighIn(APIView):
+class WeighbridgeIn(APIView):
     def get(self, request):
         infos = WeighBridgeIn.objects.prefetch_related('truck').all()
         serialized_infos = WeighBridgeInSerializer(infos, many=True)
@@ -51,5 +51,11 @@ class Tankfarm(APIView):
     def get(self, request):
         infos = OffloadingBay.objects.prefetch_related('truck').all()
         serialized_infos = OffloadingBaySerializer(infos, many=True)
+        return Response(serialized_infos.data)
+    
+class WeighbridgeOut(APIView):
+    def get(self, request):
+        infos = WeighBridgeOut.objects.prefetch_related('truck').all()
+        serialized_infos = WeighBridgeOutSerializer(infos, many=True)
         return Response(serialized_infos.data)
 
