@@ -37,3 +37,4 @@ class TruckSerializer(serializers.ModelSerializer):
     class Meta:
         model = Truck
         fields = ['id', 'driver', 'cab_plate', 'trailer_plate', 'general_info', 'weighbridge_in', 'quality_control', 'tankfarm', 'weighbridge_out']
+        depth = 2
