@@ -11,14 +11,20 @@ class Trucks(APIView):
         serialized_trucks = TruckSerializer(trucks, many=True)
         return Response(serialized_trucks.data)
 
+# class GeneralInfos(APIView):
+#     def get(self, request):
+#         infos = GeneralInfo.objects.select_related('truck').all()
+#         serialized_infos = GeneralInfoSerializer(infos, many=True)
+#         return Response(serialized_infos.data)
+    
 class GeneralInfos(APIView):
     def get(self, request):
-        infos = GeneralInfo.objects.select_related('truck').all()
+        infos = GeneralInfo.objects.prefetch_related('truck').all()
         serialized_infos = GeneralInfoSerializer(infos, many=True)
         return Response(serialized_infos.data)
 
 class Tankfarm(APIView):
     def get(self, request):
-        infos = OffloadingBay.objects.select_related('truck').all()
+        infos = OffloadingBay.objects.prefetch_related('truck').all()
         serialized_infos = OffloadingBaySerializer(infos, many=True)
         return Response(serialized_infos.data)
