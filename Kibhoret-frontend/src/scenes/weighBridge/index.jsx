@@ -4,6 +4,7 @@ import { tokens } from "../../theme";
 import Header from "../../components/Header";
 
 import StatBox from "../../components/StatBox";
+import { Link } from "react-router-dom";
 
 const WeighBridge = () => {
   const theme = useTheme();
@@ -34,19 +35,21 @@ const WeighBridge = () => {
           alignItems="center"
           justifyContent="center"
         >
-          <StatBox
-            title="IN"
-            subtitle="Record new Truck entry"
-            icon={
-              <img
-                alt="truck icon"
-                width="50px"
-                height="50px"
-                display="flex"
-                src={`/src/assets/truck-entry.svg`}
-              />
-            }
-          />
+          <Link to="/weighbridge/in">
+            <StatBox
+              title="IN"
+              subtitle="Record new Truck entry"
+              icon={
+                <img
+                  alt="truck icon"
+                  width="50px"
+                  height="50px"
+                  display="flex"
+                  src={`/src/assets/truck-entry.svg`}
+                />
+              }
+            />
+          </Link>
         </Box>
         <Box
           gridColumn="span 2"
@@ -55,21 +58,23 @@ const WeighBridge = () => {
           alignItems="center"
           justifyContent="center"
         >
-          <StatBox
-            title="OUT"
-            subtitle="Record new Truck exit"
-            display="flex"
-            icon={
-              <img
-                alt="truck icon"
-                width="50px"
-                height="50px"
-                display="flex"
-                src={`/src/assets/truck-exit.svg`}
-                color="colors.greenAccent[600]"
-              />
-            }
-          />
+          <Link to="/weighbridge/out">
+            <StatBox
+              title="OUT"
+              subtitle="Record new Truck exit"
+              display="flex"
+              icon={
+                <img
+                  alt="truck icon"
+                  width="50px"
+                  height="50px"
+                  display="flex"
+                  src={`/src/assets/truck-exit.svg`}
+                  color="colors.greenAccent[600]"
+                />
+              }
+            />
+          </Link>
         </Box>
       </Box>
     </Box>

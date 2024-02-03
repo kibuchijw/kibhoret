@@ -1,4 +1,5 @@
 import { Box, Button, TextField } from "@mui/material";
+import SendIcon from "@mui/icons-material/Send";
 import { Formik } from "formik";
 import * as yup from "yup";
 import useMediaQuery from "@mui/material/useMediaQuery";
@@ -169,7 +170,12 @@ const Lab = () => {
               />
             </Box>
             <Box display="flex" justifyContent="end" mt="20px">
-              <Button type="submit" color="secondary" variant="contained">
+              <Button
+                type="submit"
+                color="secondary"
+                variant="contained"
+                endIcon={<SendIcon />}
+              >
                 Create New Entry
               </Button>
             </Box>
