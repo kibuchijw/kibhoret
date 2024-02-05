@@ -41,8 +41,7 @@ class TruckSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Truck
-        fields = ['id', 'driver', 'cab_plate', 'trailer_plate', 'general_info',
-                  'weighbridge_in', 'quality_control', 'tankfarm', 'weighbridge_out']
+        fields = '__all__'
 
     def create(self, validated_data):
         general_info_data = validated_data.pop('general_info')
