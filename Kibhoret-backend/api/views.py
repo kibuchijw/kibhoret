@@ -54,6 +54,7 @@ class Trucks(APIView):
 class WeighbridgeIn(APIView):
     def get(self, request):
         trucks = TruckModel.objects.select_related().filter(
+            general_info__isnull=False,
             weighbridge_in__isnull=True)
         serialized_trucks = TruckSerializer(trucks, many=True)
         total_trucks = len(serialized_trucks.data)
