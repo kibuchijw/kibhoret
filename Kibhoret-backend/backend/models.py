@@ -21,6 +21,8 @@ class GeneralInfo(models.Model):
     #other methods
     def __str__(self):
         return " GateEntry"
+    class Meta:
+        verbose_name_plural = "General Info (Gate)"
     
 
 class WeighBridgeIn(models.Model):
@@ -34,6 +36,8 @@ class WeighBridgeIn(models.Model):
     def __str__(self):
         return " WB-In"
     
+    class Meta:
+        verbose_name_plural = "Weighbridge-in"
 
 
 class QualityControl(models.Model):
@@ -58,6 +62,9 @@ class QualityControl(models.Model):
 
     def __str__(self):
         return " QC"
+    
+    class Meta:
+        verbose_name_plural = "Quality Control"
 
 
 class OffloadingBay(models.Model):
@@ -68,6 +75,9 @@ class OffloadingBay(models.Model):
 
     def __str__(self):
         return " offloadBay"
+
+    class Meta:
+        verbose_name_plural = "Tankfarm"
     
 
 class WeighBridgeOut(models.Model):
@@ -79,6 +89,9 @@ class WeighBridgeOut(models.Model):
 
     def __str__(self):
         return " WB-OUT"
+    
+    class Meta:
+        verbose_name_plural = "Weighbridge-out"
     
 class Truck(models.Model):
     driver = models.CharField(max_length=50)
@@ -93,3 +106,6 @@ class Truck(models.Model):
 
     def __str__(self):
         return self.cab_plate
+
+    class Meta:
+        verbose_name_plural = "All trucks"
