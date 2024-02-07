@@ -1,8 +1,10 @@
 import { Box, Button, TextField } from "@mui/material";
+import SendIcon from "@mui/icons-material/Send";
 import { Formik } from "formik";
 import * as yup from "yup";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Header from "../../components/Header";
+import { Link } from "react-router-dom";
 
 const WeighBridgeIn = () => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
@@ -13,8 +15,12 @@ const WeighBridgeIn = () => {
 
   return (
     <Box m="20px">
-      <Header title="WEIGHBRIDGE RECORDS" subtitle="Record a new truck exit" />
-
+      <Link to="/weighbridge">
+        <Header
+          title="WEIGHBRIDGE RECORDS"
+          subtitle="Record a new truck exit"
+        />
+      </Link>
       <Formik
         onSubmit={handleFormSubmit}
         initialValues={initialValues}
@@ -91,7 +97,12 @@ const WeighBridgeIn = () => {
               />
             </Box>
             <Box display="flex" justifyContent="end" mt="20px">
-              <Button type="submit" color="secondary" variant="contained">
+              <Button
+                type="submit"
+                color="secondary"
+                variant="contained"
+                endIcon={<SendIcon />}
+              >
                 Create New Entry
               </Button>
             </Box>

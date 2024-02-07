@@ -6,6 +6,7 @@ import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
 import Header from "../../components/Header";
 
 import StatBox from "../../components/StatBox";
+import { Link } from "react-router-dom";
 
 const Dashboard = () => {
   const theme = useTheme();
@@ -48,19 +49,20 @@ const Dashboard = () => {
           alignItems="center"
           justifyContent="center"
         >
-          <StatBox
-            title="2"
-            subtitle="Trucks in Process"
-            icon={
-              <img
-                alt="truck icon"
-                width="50px"
-                height="50px"
-                display="flex"
-                src={`/src/assets/truck.png`}
-              />
-            }
-          />
+          <Link to="/trucks">
+            <StatBox
+              subtitle="View All Trucks"
+              icon={
+                <img
+                  alt="truck icon"
+                  width="50px"
+                  height="50px"
+                  display="flex"
+                  src={`/src/assets/truck.png`}
+                />
+              }
+            />
+          </Link>
         </Box>
         <Box
           gridColumn="span 4"

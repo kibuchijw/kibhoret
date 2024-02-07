@@ -7,6 +7,7 @@ import {
   MenuItem,
   Select,
 } from "@mui/material";
+import SendIcon from "@mui/icons-material/Send";
 import { Formik } from "formik";
 import * as yup from "yup";
 import useMediaQuery from "@mui/material/useMediaQuery";
@@ -62,9 +63,9 @@ const Offloading = () => {
                 sx={{ gridColumn: "span 2" }}
               />
               <FormControl sx={{ gridColumn: "span 2" }}>
-                <InputLabel id="cpoMelting">CPO Melting</InputLabel>
+                <InputLabel id="hotOilSpurging">Hot oil Spurging</InputLabel>
                 <Select
-                  label="CPO Melting"
+                  label="Hot oil Spurging"
                   type="boolean"
                   name="cpoMelting"
                   value={values.cpoMelting}
@@ -115,7 +116,12 @@ const Offloading = () => {
               />
             </Box>
             <Box display="flex" justifyContent="end" mt="20px">
-              <Button type="submit" color="secondary" variant="contained">
+              <Button
+                type="submit"
+                color="secondary"
+                variant="contained"
+                endIcon={<SendIcon />}
+              >
                 Create New Entry
               </Button>
             </Box>
