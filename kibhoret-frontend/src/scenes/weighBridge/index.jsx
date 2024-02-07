@@ -35,7 +35,7 @@ const WeighBridge = () => {
           alignItems='center'
           justifyContent='center'
         >
-          <Link to='/weighbridge/in'>
+          <Link to='/weighbridge/in' style={{ display: 'contents' }}>
             <StatBox
               title='IN'
               subtitle='Record new Truck entry'
@@ -58,7 +58,7 @@ const WeighBridge = () => {
           alignItems='center'
           justifyContent='center'
         >
-          <Link to='/weighbridge/out'>
+          <Link to='/weighbridge/out' style={{ display: 'contents' }}>
             <StatBox
               title='OUT'
               subtitle='Record new Truck exit'

@@ -43,8 +43,9 @@ const Dashboard = () => {
           display='flex'
           alignItems='center'
           justifyContent='center'
+          width='100%' // Set the width to 100% to maintain original size
         >
-          <Link to='/trucks'>
+          <Link to='/trucks' style={{ display: 'contents' }}>
             <StatBox
               subtitle='View All Trucks'
               icon={

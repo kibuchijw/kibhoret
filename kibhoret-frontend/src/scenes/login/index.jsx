@@ -65,7 +65,7 @@ const LoginForm = () => {
       localStorage.setItem('token', token);
 
       // Redirect to the dashboard
-      window.location.href = '/dashboard';
+      window.location.href = '/';
     } catch (error) {
       // Display an error message to the user
       setError('Login failed. Please check your username and password and try again.');

@@ -19,8 +19,8 @@ const Gate = () => {
       {/* GRID & CHARTS */}
       <Box display='flex' gridTemplateColumns='repeat(12, 1fr)' gridAutoRows='140px' gap='30px'>
         {/* ROW 1 */}
-        <Box gridColumn='span 2' backgroundColor={colors.primary[400]} display='flex'>
-          <Link to='/gate/in'>
+        <Box gridColumn='span 2' backgroundColor={colors.primary[400]} display='flex' alignItems='center'>
+          <Link to='/gate/in' style={{ display: 'contents' }}>
             <StatBox
               title='IN'
               subtitle='Record new Truck entry'
@@ -37,7 +37,7 @@ const Gate = () => {
           </Link>
         </Box>
         <Box gridColumn='span 2' backgroundColor={colors.primary[400]} display='flex'>
-          <Link to='/gate/out'>
+          <Link to='/gate/out' style={{ display: 'contents' }}>
             <StatBox
               title='OUT'
               subtitle='Record new Truck exit'

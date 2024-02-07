@@ -86,19 +86,19 @@ class WeighBridgeOut(models.Model):
 
 
 class Truck(models.Model):
-    driver = models.CharField(max_length=50)
+    driver = models.CharField(max_length=50, blank=True)
     cab_plate = models.CharField(max_length=20)
     trailer_plate = models.CharField(max_length=20)
     general_info = models.ForeignKey(
-        GeneralInfo, on_delete=models.CASCADE, null=True, related_name='truck')
+        GeneralInfo, on_delete=models.CASCADE, null=True, blank=True, related_name='truck')
     weighbridge_in = models.ForeignKey(
-        WeighBridgeIn, on_delete=models.CASCADE, null=True, related_name='truck')
+        WeighBridgeIn, on_delete=models.CASCADE, null=True, blank=True, related_name='truck')
     quality_control = models.ForeignKey(
-        QualityControl, on_delete=models.CASCADE, null=True, related_name='truck')
+        QualityControl, on_delete=models.CASCADE, null=True, blank=True, related_name='truck')
     tankfarm = models.ForeignKey(
-        OffloadingBay, on_delete=models.CASCADE, null=True, related_name='truck')
+        OffloadingBay, on_delete=models.CASCADE, null=True, blank=True, related_name='truck')
     weighbridge_out = models.ForeignKey(
-        WeighBridgeOut, on_delete=models.CASCADE, null=True, related_name='truck')
+        WeighBridgeOut, on_delete=models.CASCADE, null=True, blank=True, related_name='truck')
 
     def __str__(self):
         return self.cab_plate

@@ -17,17 +17,22 @@ import LoginForm from './scenes/login';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { ColorModeContext, useMode } from './theme';
 import { verifyToken } from './components/auth';
+import TruckMonitoringService from './components/truckMonitoring';
 
 function App () {
   const [theme, colorMode] = useMode();
   const [isSidebar, setIsSidebar] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(verifyToken()); // Check if user is logged in
+  const [notification, setNotification] = useState('');
   const location = useLocation();
 
   const isLoginPage = location.pathname === '/login';
   // PrivateRoute component to protect routes
   const PrivateRoute = ({ element, ...rest }) => {
     return isLoggedIn ? element : <Navigate to='/login' replace />;
+  };
+  const handleNotification = (message) => {
+    setNotification(message);
   };
   return (
     <ColorModeContext.Provider value={colorMode}>
@@ -36,7 +41,8 @@ function App () {
         <div className='app'>
           {!isLoginPage && <Sidebar isSidebar={isSidebar} />}
           <main className='content'>
-            {!isLoginPage && <Topbar setIsSidebar={setIsSidebar} />}
+            {!isLoginPage && <Topbar setIsSidebar={setIsSidebar} notifications={notification} />}
+            <TruckMonitoringService onNotification={handleNotification} />
             <Routes>
               <Route path='/login' element={<LoginForm setIsLoggedIn={setIsLoggedIn} />} />
               <Route path='/' element={<PrivateRoute element={<Dashboard />} />} />
