@@ -9,6 +9,8 @@ pylint-django = "*"
 django-tastypie = "*"
 psycopg2 = "*"
 djangorestframework = "*"
+django-cors-headers = "*"
+jwt = "*"
 
 [dev-packages]
 
