@@ -11,8 +11,9 @@ psycopg2 = "*"
 djangorestframework = "*"
 django-cors-headers = "*"
 jwt = "*"
+pyjwt = "*"
 
 [dev-packages]
 
 [requires]
-python_version = "3.12"
+python_version = "3.8"
