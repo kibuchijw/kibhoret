@@ -1,18 +1,18 @@
-import { useState } from "react";
-import { ProSidebar, Menu, MenuItem } from "react-pro-sidebar";
-import { Box, IconButton, Typography, useTheme } from "@mui/material";
-import { Link } from "react-router-dom";
-import "react-pro-sidebar/dist/css/styles.css";
-import { tokens } from "../../theme";
-import HomeIcon from "@mui/icons-material/Home";
-import LocalShippingIcon from "@mui/icons-material/LocalShipping";
-import FenceIcon from "@mui/icons-material/Fence";
-import ScaleIcon from "@mui/icons-material/Scale";
-import ScienceIcon from "@mui/icons-material/Science";
-import BiotechIcon from "@mui/icons-material/Biotech";
-import Battery0BarIcon from "@mui/icons-material/Battery0Bar";
-import QueryStatsIcon from "@mui/icons-material/QueryStats";
-import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
+import { useState } from 'react';
+import { ProSidebar, Menu, MenuItem } from 'react-pro-sidebar';
+import { Box, IconButton, Typography, useTheme } from '@mui/material';
+import { Link } from 'react-router-dom';
+import 'react-pro-sidebar/dist/css/styles.css';
+import { tokens } from '../../theme';
+import HomeIcon from '@mui/icons-material/Home';
+import LocalShippingIcon from '@mui/icons-material/LocalShipping';
+import FenceIcon from '@mui/icons-material/Fence';
+import ScaleIcon from '@mui/icons-material/Scale';
+import ScienceIcon from '@mui/icons-material/Science';
+import BiotechIcon from '@mui/icons-material/Biotech';
+import Battery0BarIcon from '@mui/icons-material/Battery0Bar';
+import QueryStatsIcon from '@mui/icons-material/QueryStats';
+import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
@@ -21,7 +21,7 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
     <MenuItem
       active={selected === title}
       style={{
-        color: colors.grey[100],
+        color: colors.grey[100]
       }}
       onClick={() => setSelected(title)}
       icon={icon}
@@ -36,26 +36,26 @@ const Sidebar = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [selected, setSelected] = useState("Dashboard");
+  const [selected, setSelected] = useState('Dashboard');
 
   return (
     <Box
       sx={{
-        "& .pro-sidebar-inner": {
-          background: `${colors.primary[400]} !important`,
+        '& .pro-sidebar-inner': {
+          background: `${colors.primary[400]} !important`
         },
-        "& .pro-icon-wrapper": {
-          backgroundColor: "transparent !important",
+        '& .pro-icon-wrapper': {
+          backgroundColor: 'transparent !important'
         },
-        "& .pro-inner-item": {
-          padding: "5px 35px 5px 20px !important",
+        '& .pro-inner-item': {
+          padding: '5px 35px 5px 20px !important'
         },
-        "& .pro-inner-item:hover": {
-          color: "#868dfb !important",
+        '& .pro-inner-item:hover': {
+          color: '#868dfb !important'
         },
-        "& .pro-menu-item.active": {
-          color: "#6870fa !important",
-        },
+        '& .pro-menu-item.active': {
+          color: '#6870fa !important'
+        }
       }}
     >
       <ProSidebar collapsed={isCollapsed}>
@@ -65,17 +65,12 @@ const Sidebar = () => {
             onClick={() => setIsCollapsed(!isCollapsed)}
             icon={isCollapsed ? <MenuOutlinedIcon /> : undefined}
             style={{
-              margin: "10px 0 20px 0",
-              color: colors.grey[100],
+              margin: '10px 0 20px 0',
+              color: colors.grey[100]
             }}
           >
             {!isCollapsed && (
-              <Box
-                display="flex"
-                justifyContent="space-between"
-                alignItems="center"
-                ml="15px"
-              >
+              <Box display="flex" justifyContent="space-between" alignItems="center" ml="15px">
                 <Typography variant="h3" color={colors.grey[100]}>
                   DEPARTMENTS
                 </Typography>
@@ -94,7 +89,7 @@ const Sidebar = () => {
                   width="100px"
                   height="100px"
                   src={`/src/assets/user.svg`}
-                  style={{ cursor: "pointer", borderRadius: "50%" }}
+                  style={{ cursor: 'pointer', borderRadius: '50%' }}
                 />
               </Box>
               <Box textAlign="center">
@@ -102,7 +97,7 @@ const Sidebar = () => {
                   variant="h2"
                   color={colors.grey[100]}
                   fontWeight="bold"
-                  sx={{ m: "10px 0 0 0" }}
+                  sx={{ m: '10px 0 0 0' }}
                 >
                   QUxPTA
                 </Typography>
@@ -113,10 +108,10 @@ const Sidebar = () => {
             </Box>
           )}
 
-          <Box paddingLeft={isCollapsed ? undefined : "10%"}>
+          <Box paddingLeft={isCollapsed ? undefined : '10%'}>
             <Item
               title="Dashboard"
-              to="/"
+              to="/dashboard"
               icon={<HomeIcon />}
               selected={selected}
               setSelected={setSelected}

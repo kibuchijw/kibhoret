@@ -1,9 +1,9 @@
-import { Box, Typography, useTheme } from "@mui/material";
-import { tokens } from "../../theme";
-import { Link } from "react-router-dom";
+import { Box, Typography, useTheme } from '@mui/material';
+import { tokens } from '../../theme';
+import { Link } from 'react-router-dom';
 
-import Header from "../../components/Header";
-import StatBox from "../../components/StatBox";
+import Header from '../../components/Header';
+import StatBox from '../../components/StatBox';
 
 const Gate = () => {
   const theme = useTheme();
@@ -17,18 +17,9 @@ const Gate = () => {
       </Box>
 
       {/* GRID & CHARTS */}
-      <Box
-        display="flex"
-        gridTemplateColumns="repeat(12, 1fr)"
-        gridAutoRows="140px"
-        gap="30px"
-      >
+      <Box display="flex" gridTemplateColumns="repeat(12, 1fr)" gridAutoRows="140px" gap="30px">
         {/* ROW 1 */}
-        <Box
-          gridColumn="span 2"
-          backgroundColor={colors.primary[400]}
-          display="flex"
-        >
+        <Box gridColumn="span 2" backgroundColor={colors.primary[400]} display="flex">
           <Link to="/gate/in">
             <StatBox
               title="IN"
@@ -45,11 +36,7 @@ const Gate = () => {
             />
           </Link>
         </Box>
-        <Box
-          gridColumn="span 2"
-          backgroundColor={colors.primary[400]}
-          display="flex"
-        >
+        <Box gridColumn="span 2" backgroundColor={colors.primary[400]} display="flex">
           <Link to="/gate/out">
             <StatBox
               title="OUT"

@@ -1,24 +1,20 @@
-import {
-  Box,
-  Button,
-  TextField,
-  Slider,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-} from "@mui/material";
-import SendIcon from "@mui/icons-material/Send";
-import { Formik } from "formik";
-import * as yup from "yup";
-import useMediaQuery from "@mui/material/useMediaQuery";
-import Header from "../../components/Header";
+import { Box, TextField, Slider, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import LoadingButton from '@mui/lab/LoadingButton';
+import SendIcon from '@mui/icons-material/Send';
+import { Formik } from 'formik';
+import * as yup from 'yup';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import Header from '../../components/Header';
+import { useState } from 'react';
 
 const GateIn = () => {
-  const isNonMobile = useMediaQuery("(min-width:600px)");
+  const isNonMobile = useMediaQuery('(min-width:600px)');
+  const [loading, setLoading] = useState(false);
 
   const handleFormSubmit = (values) => {
+    setLoading(true);
     console.log(values);
+    setLoading(false); // Set loading state back to false after submission
   };
   const handlePO_status = (values) => {
     console.log(values);
@@ -27,20 +23,20 @@ const GateIn = () => {
   const marks = [
     {
       value: 0,
-      label: "Dirty",
+      label: 'Dirty'
     },
     {
       value: 25,
-      label: "Not so Dirty",
+      label: 'Not so Dirty'
     },
     {
       value: 50,
-      label: "Clean",
+      label: 'Clean'
     },
     {
       value: 80,
-      label: "Very clean",
-    },
+      label: 'Very clean'
+    }
   ];
 
   function valuetext(value) {
@@ -56,21 +52,14 @@ const GateIn = () => {
         initialValues={initialValues}
         validationSchema={checkoutSchema}
       >
-        {({
-          values,
-          errors,
-          touched,
-          handleBlur,
-          handleChange,
-          handleSubmit,
-        }) => (
+        {({ values, errors, touched, handleBlur, handleChange, handleSubmit }) => (
           <form onSubmit={handleSubmit}>
             <Box
               display="grid"
               gap="30px"
               gridTemplateColumns="repeat(4, minmax(0, 1fr))"
               sx={{
-                "& > div": { gridColumn: isNonMobile ? undefined : "span 4" },
+                '& > div': { gridColumn: isNonMobile ? undefined : 'span 4' }
               }}
             >
               <TextField
@@ -84,7 +73,7 @@ const GateIn = () => {
                 name="timeIn"
                 error={!!touched.timeIn && !!errors.timeIn}
                 helperText={touched.timeIn && errors.timeIn}
-                sx={{ gridColumn: "span 2", color: "primary[400]" }}
+                sx={{ gridColumn: 'span 2', color: 'primary[400]' }}
               />
               <TextField
                 fullWidth
@@ -97,7 +86,7 @@ const GateIn = () => {
                 name="loadingDate"
                 error={!!touched.loadingDate && !!errors.loadingDate}
                 helperText={touched.loadingDate && errors.loadingDate}
-                sx={{ gridColumn: "span 2", color: "primary[400]" }}
+                sx={{ gridColumn: 'span 2', color: 'primary[400]' }}
               />
               <TextField
                 fullWidth
@@ -110,7 +99,7 @@ const GateIn = () => {
                 name="deliveryNumber"
                 error={!!touched.deliveryNumber && !!errors.deliveryNumber}
                 helperText={touched.deliveryNumber && errors.deliveryNumber}
-                sx={{ gridColumn: "span 2" }}
+                sx={{ gridColumn: 'span 2' }}
               />
               <Slider
                 fullwidth
@@ -127,7 +116,7 @@ const GateIn = () => {
                 valuetext={values.cleanliness}
                 color="secondary"
                 sx={{
-                  gridColumn: "span 4",
+                  gridColumn: 'span 4'
                 }}
               />
               <TextField
@@ -141,7 +130,7 @@ const GateIn = () => {
                 name="truckPlate"
                 error={!!touched.truckPlate && !!errors.truckPlate}
                 helperText={touched.truckPlate && errors.truckPlate}
-                sx={{ gridColumn: "span 2" }}
+                sx={{ gridColumn: 'span 2' }}
               />
               <TextField
                 fullWidth
@@ -154,9 +143,9 @@ const GateIn = () => {
                 name="tankerPlate"
                 error={!!touched.tankerPlate && !!errors.tankerPlate}
                 helperText={touched.tankerPlate && errors.tankerPlate}
-                sx={{ gridColumn: "span 2" }}
+                sx={{ gridColumn: 'span 2' }}
               />
-              <FormControl sx={{ gridColumn: "span 2" }}>
+              <FormControl sx={{ gridColumn: 'span 2' }}>
                 <InputLabel id="noOfSeals">Number of Seals</InputLabel>
                 <Select
                   label="Number of Seals"
@@ -172,7 +161,7 @@ const GateIn = () => {
                   <MenuItem value={5}>Five</MenuItem>
                 </Select>
               </FormControl>
-              <FormControl sx={{ gridColumn: "span 2" }}>
+              <FormControl sx={{ gridColumn: 'span 2' }}>
                 <InputLabel id="sealCondition">Seal Condition</InputLabel>
                 <Select
                   label="Seal Condition"
@@ -181,12 +170,8 @@ const GateIn = () => {
                   value={values.sealCondition}
                   onChange={handleChange}
                 >
-                  <MenuItem onClick={() => handlePO_status(true)}>
-                    Intact
-                  </MenuItem>
-                  <MenuItem onClick={() => handlePO_status(false)}>
-                    Tampered
-                  </MenuItem>
+                  <MenuItem onClick={() => handlePO_status(true)}>Intact</MenuItem>
+                  <MenuItem onClick={() => handlePO_status(false)}>Tampered</MenuItem>
                 </Select>
               </FormControl>
               <TextField
@@ -200,8 +185,8 @@ const GateIn = () => {
                 name="sealingCondition"
                 error={!!touched.sealingCondition && !!errors.sealingCondition}
                 helperText={touched.sealingCondition && errors.sealingCondition}
-                sx={{ gridColumn: "span 2" }}
-              />{" "}
+                sx={{ gridColumn: 'span 2' }}
+              />{' '}
               <TextField
                 fullWidth
                 variant="filled"
@@ -213,9 +198,9 @@ const GateIn = () => {
                 name="leakages"
                 error={!!touched.leakages && !!errors.leakages}
                 helperText={touched.leakages && errors.leakages}
-                sx={{ gridColumn: "span 2" }}
+                sx={{ gridColumn: 'span 2' }}
               />
-              <FormControl sx={{ gridColumn: "span 2" }}>
+              <FormControl sx={{ gridColumn: 'span 2' }}>
                 <InputLabel id="waterReservoir">Water Reservoir</InputLabel>
                 <Select
                   label="Water Reservoir"
@@ -224,15 +209,11 @@ const GateIn = () => {
                   value={values.waterReservoir}
                   onChange={handleChange}
                 >
-                  <MenuItem onClick={() => handlePO_status(true)}>
-                    Empty
-                  </MenuItem>
-                  <MenuItem onClick={() => handlePO_status(false)}>
-                    Full
-                  </MenuItem>
+                  <MenuItem onClick={() => handlePO_status(true)}>Empty</MenuItem>
+                  <MenuItem onClick={() => handlePO_status(false)}>Full</MenuItem>
                 </Select>
               </FormControl>
-              <FormControl sx={{ gridColumn: "span 2" }}>
+              <FormControl sx={{ gridColumn: 'span 2' }}>
                 <InputLabel id="fuelGauge">Fuel Gauge</InputLabel>
                 <Select
                   label="Fuel Gauge"
@@ -259,18 +240,21 @@ const GateIn = () => {
                 name="officerName"
                 error={!!touched.officerName && !!errors.officerName}
                 helperText={touched.officerName && errors.officerName}
-                sx={{ gridColumn: "span 4" }}
+                sx={{ gridColumn: 'span 4' }}
               />
             </Box>
             <Box display="flex" justifyContent="end" mt="20px">
-              <Button
+              <LoadingButton
                 type="submit"
                 color="secondary"
                 variant="contained"
+                loading={loading}
+                disabled={loading} // Disable button during loading
+                loadingPosition="start"
                 endIcon={<SendIcon />}
               >
-                Create New Entry
-              </Button>
+                <span>Create New Entry</span>
+              </LoadingButton>
             </Box>
           </form>
         )}
@@ -285,47 +269,38 @@ const truckPlateRegExp = /^[A-Z]{3} \d{3}[A-Z]$/;
 const tankerNumberRegExp = /^[A-Z]{2} \d{4}$/;
 
 const checkoutSchema = yup.object().shape({
-  timeIn: yup.string().required("required"),
-  loadingDate: yup.string().required("required"),
-  cleanliness: yup.string().required("required"),
+  timeIn: yup.string().required('required'),
+  loadingDate: yup.string().required('required'),
+  cleanliness: yup.string().required('required'),
   deliveryNumber: yup
     .string()
-    .matches(deliveryNumberRegExp, "Delivery number is not valid")
-    .required("required"),
+    .matches(deliveryNumberRegExp, 'Delivery number is not valid')
+    .required('required'),
   truckPlate: yup
     .string()
-    .matches(truckPlateRegExp, "Truck number plate is not valid")
-    .required("required"),
+    .matches(truckPlateRegExp, 'Truck number plate is not valid')
+    .required('required'),
   tankerPlate: yup
     .string()
-    .matches(tankerNumberRegExp, "Tanker number plate is not valid")
-    .required("required"),
-  sealingCondition: yup
-    .string()
-    .max(100, "Maximum words exceeded!")
-    .required("required"),
-  leakages: yup
-    .string()
-    .max(100, "Maximum words exceeded!")
-    .required("required"),
-  officerName: yup
-    .string()
-    .max(100, "Maximum words exceeded!")
-    .required("required"),
+    .matches(tankerNumberRegExp, 'Tanker number plate is not valid')
+    .required('required'),
+  sealingCondition: yup.string().max(100, 'Maximum words exceeded!').required('required'),
+  leakages: yup.string().max(100, 'Maximum words exceeded!').required('required'),
+  officerName: yup.string().max(100, 'Maximum words exceeded!').required('required')
 });
 const initialValues = {
-  timeIn: "",
-  loadingDate: "",
-  deliveryNumber: "",
-  cleanliness: "",
-  truckPlate: "",
-  tankerPlate: "",
-  seals: "",
-  sealCondition: "",
-  sealingCondition: "",
-  leakages: "",
-  fuelGauge: "",
-  officerName: "",
+  timeIn: '',
+  loadingDate: '',
+  deliveryNumber: '',
+  cleanliness: '',
+  truckPlate: '',
+  tankerPlate: '',
+  seals: '',
+  sealCondition: '',
+  sealingCondition: '',
+  leakages: '',
+  fuelGauge: '',
+  officerName: ''
 };
 
 export default GateIn;
