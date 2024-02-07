@@ -1,11 +1,19 @@
+from django.conf import settings
 from django.shortcuts import render
-from rest_framework.response import JsonResponse
+import jwt
+from datetime import datetime, timedelta
+# from rest_framework.response import JsonResponse
 from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import TokenAuthentication
 from rest_framework import status
 from backend.models import *
 from backend.models import Truck as TruckModel
 from .serializers import *
 from django.http import JsonResponse
+
+
+from rest_framework.response import Response
 
 
 # Create your views here.
@@ -92,3 +100,34 @@ class WeighbridgeOut(APIView):
         total_trucks = len(serialized_trucks.data)
         all_trucks = serialized_trucks.data
         return JsonResponse({"total_trucks": total_trucks, "all_trucks": all_trucks})
+
+# views.py
+
+
+class UserLoginAPIView(APIView):
+    # authentication_classes = [TokenAuthentication]
+    # permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        serializer = UserLoginSerializer(data=request.data)
+        if serializer.is_valid():
+            user = serializer.validated_data['user']
+
+            # Retrieve user roles
+            roles = [group.name for group in user.groups.all()]
+
+            # Define the expiration time
+            expiration_time = datetime.utcnow() + timedelta(minutes=30)
+
+            # Generate JWT token with user role information
+            token_payload = {
+                'user_id': user.id,
+                'username': user.username,
+                'roles': roles,  # Include user roles in the payload
+                'exp': expiration_time,  # Expiration time
+            }
+            token = jwt.encode(
+                token_payload, settings.SECRET_KEY, algorithm='HS256')
+            return Response({"token": token}, status=status.HTTP_200_OK)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
