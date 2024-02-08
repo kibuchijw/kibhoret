@@ -12,4 +12,5 @@ urlpatterns = [
     path('weighbridge/in/', views.WeighbridgeIn.as_view()),
     path('weighbridge/out/', views.WeighbridgeOut.as_view()),
     path('qualitycontrol/', views.Lab.as_view()),
+    path('auth/login/', views.UserLoginAPIView.as_view()),
 ]
