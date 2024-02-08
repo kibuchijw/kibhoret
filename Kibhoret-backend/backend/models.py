@@ -19,12 +19,10 @@ class GeneralInfo(models.Model):
     time_out = models.DateTimeField(default=timezone.now)
     officer_name = models.CharField(max_length=100)
 
-    class Meta:
-        verbose_name_plural = "General Info"
-
     # other methods
     def __str__(self):
         return " GateEntry"
+    
     class Meta:
         verbose_name_plural = "General Info (Gate)"
     

@@ -2,7 +2,6 @@ from django.conf import settings
 from django.shortcuts import render
 import jwt
 from datetime import datetime, timedelta
-# from rest_framework.response import JsonResponse
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
@@ -21,12 +20,10 @@ class Truck(APIView):
         truck = get_object_or_404(TruckModel, pk=pk)
         serializer = TruckSerializer(truck)
         return JsonResponse(serializer.data)
-        return JsonResponse(serializer.data)
 
     def delete(self, request, pk):
         truck = get_object_or_404(TruckModel, pk=pk)
         truck.delete()
-        return JsonResponse(status=status.HTTP_204_NO_CONTENT)
         return JsonResponse(status=status.HTTP_204_NO_CONTENT)
 
     def put(self, request, pk):
@@ -46,7 +43,6 @@ class Trucks(APIView):
         serialized_trucks = TruckSerializer(trucks, many=True)
         total_trucks = len(serialized_trucks.data)
         all_trucks = serialized_trucks.data
-        return JsonResponse({"total_trucks": total_trucks, "all_trucks": all_trucks})
         return JsonResponse({"total_trucks": total_trucks, "all_trucks": all_trucks})
 
     def post(self, request):
@@ -69,7 +65,6 @@ class WeighbridgeIn(APIView):
         total_trucks = len(serialized_trucks.data)
         all_trucks = serialized_trucks.data
         return JsonResponse({"total_trucks": total_trucks, "all_trucks": all_trucks})
-        return JsonResponse({"total_trucks": total_trucks, "all_trucks": all_trucks})
 
 
 class Lab(APIView):
@@ -89,7 +84,6 @@ class Tankfarm(APIView):
         serialized_trucks = TruckSerializer(trucks, many=True)
         total_trucks = len(serialized_trucks.data)
         all_trucks = serialized_trucks.data
-        return JsonResponse({"total_trucks": total_trucks, "all_trucks": all_trucks})
         return JsonResponse({"total_trucks": total_trucks, "all_trucks": all_trucks})
 
 
