@@ -33,9 +33,6 @@ const Trucks = () => {
 
   const columns = [
     { field: 'id', headerName: 'ID', flex: 'auto' },
-    { field: 'driver', headerName: 'Driver', headerAlign: 'left', align: 'left', flex: 'auto' },
-    { field: 'cab_plate', headerName: 'Cab Plate', headerAlign: 'left', align: 'left', flex: 'auto' },
-    { field: 'trailer_plate', headerName: 'Trailer Plate', headerAlign: 'left', align: 'left', flex: 'auto' },
     {
       field: 'actions',
       headerName: 'Actions',
@@ -46,7 +43,11 @@ const Trucks = () => {
       renderCell: (params) => (
         <Button color='secondary' variant='outlined' onClick={() => handleViewClick(params.row)}>View</Button>
       )
-    }
+    },
+    { field: 'cab_plate', headerName: 'Cab Plate', headerAlign: 'left', align: 'left', flex: 'auto' },
+    { field: 'trailer_plate', headerName: 'Trailer Plate', headerAlign: 'left', align: 'left', flex: 'auto' },
+    { field: 'driver', headerName: 'Driver', headerAlign: 'left', align: 'left', flex: 'auto' }
+
   ];
 
   const handleViewClick = (truck) => {
@@ -77,24 +78,24 @@ const Trucks = () => {
         <DataGrid checkboxSelection rows={trucks} columns={columns} />
       </Box>
       <Dialog open={openDialog} onClose={handleCloseDialog}>
-        <DialogTitle>Truck Details</DialogTitle>
+        <DialogTitle><b>Truck Details</b></DialogTitle>
         <DialogContent>
           {selectedTruck && (
             <Box>
-              <Typography>Driver: {selectedTruck.driver || 'Not yet filled!'}</Typography>
-              <Typography>Cab Plate: {selectedTruck.cab_plate || 'Not yet filled!'}</Typography>
-              <Typography>Trailer Plate: {selectedTruck.trailer_plate || 'Not yet filled!'}</Typography>
-              <Typography>Delivery Number: {selectedTruck.general_info?.delivery_number || 'Not yet filled!'}</Typography>
-              <Typography>Loading Date: {selectedTruck.general_info?.loading_date || 'Not yet filled!'}</Typography>
-              <Typography>Fuel Gauge: {selectedTruck.general_info?.fuel_gauge || 'Not yet filled!'}</Typography>
-              <Typography>Water Reservoir: {selectedTruck.general_info?.water_reservoir || 'Not yet filled!'}</Typography>
-              <Typography>Number of Seals: {selectedTruck.general_info?.number_of_seals || 'Not yet filled!'}</Typography>
-              <Typography>Seals Condition: {selectedTruck.general_info?.seals_condition || 'Not yet filled!'}</Typography>
-              <Typography>Sealing Condition: {selectedTruck.general_info?.sealing_condition || 'Not yet filled!'}</Typography>
-              <Typography>Seals Identification: {selectedTruck.general_info?.seals_identification || 'Not yet filled!'}</Typography>
-              <Typography>Time In: {selectedTruck.general_info?.time_in || 'Not yet filled!'}</Typography>
-              <Typography>Time Out: {selectedTruck.general_info?.time_out || 'Not yet filled!'}</Typography>
-              <Typography>Officer Name: {selectedTruck.general_info?.officer_name || 'Not yet filled!'}</Typography>
+              <Typography><b>Driver:</b> {selectedTruck.driver || 'Not yet filled!'}</Typography>
+              <Typography><b>Cab Plate:</b> {selectedTruck.cab_plate || 'Not yet filled!'}</Typography>
+              <Typography><b>Trailer Plate:</b> {selectedTruck.trailer_plate || 'Not yet filled!'}</Typography>
+              <Typography><b>Delivery Number:</b> {selectedTruck.general_info?.delivery_number || 'Not yet filled!'}</Typography>
+              <Typography><b>Loading Date:</b> {selectedTruck.general_info?.loading_date || 'Not yet filled!'}</Typography>
+              <Typography><b>Fuel Gauge:</b> {selectedTruck.general_info?.fuel_gauge || 'Not yet filled!'}</Typography>
+              <Typography><b>Water Reservoir:</b> {selectedTruck.general_info?.water_reservoir || 'Not yet filled!'}</Typography>
+              <Typography><b>Number of Seals:</b> {selectedTruck.general_info?.number_of_seals || 'Not yet filled!'}</Typography>
+              <Typography><b>Seals Condition:</b> {selectedTruck.general_info?.seals_condition || 'Not yet filled!'}</Typography>
+              <Typography><b>Sealing Condition:</b> {selectedTruck.general_info?.sealing_condition || 'Not yet filled!'}</Typography>
+              <Typography><b>Seals Identification:</b> {selectedTruck.general_info?.seals_identification || 'Not yet filled!'}</Typography>
+              <Typography><b>Time In:</b> {selectedTruck.general_info?.time_in || 'Not yet filled!'}</Typography>
+              <Typography><b>Time Out:</b> {selectedTruck.general_info?.time_out || 'Not yet filled!'}</Typography>
+              <Typography><b>Officer Name:</b> {selectedTruck.general_info?.officer_name || 'Not yet filled!'}</Typography>
             </Box>
           )}
         </DialogContent>

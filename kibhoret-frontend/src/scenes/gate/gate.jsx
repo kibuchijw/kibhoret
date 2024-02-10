@@ -250,6 +250,7 @@ const GateForm = () => {
                 type='submit'
                 color='secondary'
                 variant='contained'
+                sx={{ mt: 3, mb: 2 }}
                 loading={loading}
                 disabled={loading} // Disable button during loading
                 loadingPosition='start'
