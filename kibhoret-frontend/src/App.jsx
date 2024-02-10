@@ -45,28 +45,23 @@ function App () {
             {!isLoginPage && <Topbar setIsSidebar={setIsSidebar} notifications={notification} />}
             <TruckMonitoringService onNotification={handleNotification} />
             <Routes>
-              <Route path='/login' element={<LoginForm setIsLoggedIn={setIsLoggedIn} />} />
+              <Route path='/login' element={isLoggedIn ? <Navigate to='/' replace /> : <LoginForm setIsLoggedIn={setIsLoggedIn} />} />
               <Route path='/' element={<PrivateRoute element={<Dashboard />} />} />
               <Route path='/trucks' element={<PrivateRoute element={<Trucks />} />} />
               <Route path='/gate' element={<PrivateRoute element={<Gate />} />} />
               <Route path='/gate/form' element={<PrivateRoute element={<GateForm />} />} />
               <Route path='/weighbridge' element={<PrivateRoute element={<WeighBridge />} />} />
-              <Route
-                path='/weighbridge/in'
-                element={<PrivateRoute element={<WeighBridgeIn />} />}
-              />
-              <Route
-                path='/weighbridge/out'
-                element={<PrivateRoute element={<WeighBridgeOut />} />}
-              />
+              <Route path='/weighbridge/in' element={<PrivateRoute element={<WeighBridgeIn />} />} />
+              <Route path='/weighbridge/out' element={<PrivateRoute element={<WeighBridgeOut />} />} />
               <Route path='/lab' element={<PrivateRoute element={<Lab />} />} />
               <Route path='/lab/form' element={<PrivateRoute element={<LabForm />} />} />
               <Route path='/offloading' element={<PrivateRoute element={<Offloading />} />} />
               <Route path='/offloading/form' element={<PrivateRoute element={<OffloadingForm />} />} />
+              {/* Catch all other random routes */}
+              <Route path='*' element={isLoggedIn ? <Navigate to='/' replace /> : <Navigate to='/login' replace />} />
 
               {/* { <Route path="/admin" element={<Admin />} />} */}
-              {/* {  <Route path="/faq" element={<FAQ />} />} */}
-              {/* { <Route path="/calendar" element={<Calendar />} />} */}
+              {/* {  <Route path="/metrics" element={<FAQ />} />} */}
             </Routes>
           </main>
         </div>
