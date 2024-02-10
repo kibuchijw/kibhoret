@@ -26,13 +26,13 @@ const TruckMonitoringService = ({ onNotification }) => {
         onNotification('Truck headed to weighbridge in. Notification sent.');
       }
       if (truck.weighbridge_in && !truck.quality_control) {
-        onNotification('Truck at weighbridge in. Proceed to quality sampling.');
+        onNotification('Truck at weighbridge in. Proceed to quality control.');
       }
       if (truck.quality_control && !truck.tankfarm) {
         onNotification('Truck passed quality control. Proceed to offloading.');
       }
       if (truck.tankfarm && !truck.weighbridge_out) {
-        onNotification('Truck at tankfarm. Head to weighbridge out for second weighing.');
+        onNotification('Truck at offloading. Head to weighbridge out for second weighing.');
       }
       if (truck.weighbridge_out) {
         onNotification('Truck ready to exit. Proceed to the gate.');

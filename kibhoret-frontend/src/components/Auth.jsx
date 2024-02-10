@@ -1,5 +1,3 @@
-// src/components/auth.jsx
-
 // Function to decode JWT token
 export const decodeToken = (token) => {
   try {

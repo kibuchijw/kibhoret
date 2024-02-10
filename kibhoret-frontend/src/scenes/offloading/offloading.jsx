@@ -1,20 +1,31 @@
-import { Box, Button, TextField } from '@mui/material';
+import {
+  Box,
+  Button,
+  TextField,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select
+} from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Header from '../../components/Header';
 
-const GateOut = () => {
+const OffloadingForm = () => {
   const isNonMobile = useMediaQuery('(min-width:600px)');
 
   const handleFormSubmit = (values) => {
     console.log(values);
   };
+  const handlePO_status = (values) => {
+    console.log(values);
+  };
 
   return (
     <Box m='20px'>
-      <Header title='MAKE ENTRY' subtitle='Record a new truck exit' />
+      <Header title='OFFLOADING BAY' subtitle='Record new offload entry' />
 
       <Formik
         onSubmit={handleFormSubmit}
@@ -41,28 +52,54 @@ const GateOut = () => {
               <TextField
                 fullWidth
                 variant='filled'
-                type='text'
-                label='Truck Plate'
+                type='time'
+                label='Time In'
                 onBlur={handleBlur}
                 onChange={handleChange}
-                value={values.email}
-                name='truckPlate'
-                error={!!touched.truckPlate && !!errors.truckPlate}
-                helperText={touched.truckPlate && errors.truckPlate}
+                value={values.timeIn}
+                name='timeIn'
+                error={!!touched.timeIn && !!errors.timeIn}
+                helperText={touched.timeIn && errors.timeIn}
+                sx={{ gridColumn: 'span 2' }}
+              />
+              <FormControl sx={{ gridColumn: 'span 2' }}>
+                <InputLabel id='hotOilSpurging'>Hot oil Spurging</InputLabel>
+                <Select
+                  label='Hot oil Spurging'
+                  type='boolean'
+                  name='cpoMelting'
+                  value={values.cpoMelting}
+                  onChange={handleChange}
+                >
+                  <MenuItem onClick={() => handlePO_status(true)}>Yes</MenuItem>
+                  <MenuItem onClick={() => handlePO_status(false)}>no</MenuItem>
+                </Select>
+              </FormControl>
+              <TextField
+                fullWidth
+                variant='filled'
+                type='text'
+                label='Notes'
+                onBlur={handleBlur}
+                onChange={handleChange}
+                value={values.notes}
+                name='notes'
+                error={!!touched.notes && !!errors.notes}
+                helperText={touched.notes && errors.notes}
                 sx={{ gridColumn: 'span 2' }}
               />
               <TextField
                 fullWidth
                 variant='filled'
                 type='text'
-                label='Tanker Plate'
+                label='Operator Name'
                 onBlur={handleBlur}
                 onChange={handleChange}
-                value={values.tankerPlate}
-                name='tankerPlate'
-                error={!!touched.tankerPlate && !!errors.tankerPlate}
-                helperText={touched.tankerPlate && errors.tankerPlate}
-                sx={{ gridColumn: 'span 2' }}
+                value={values.operatorName}
+                name='operatorName'
+                error={!!touched.operatorName && !!errors.operatorName}
+                helperText={touched.operatorName && errors.operatorName}
+                sx={{ gridColumn: 'span 2', color: 'primary[400]' }}
               />
               <TextField
                 fullWidth
@@ -71,23 +108,10 @@ const GateOut = () => {
                 label='Time Out'
                 onBlur={handleBlur}
                 onChange={handleChange}
-                value={values.timeIn}
-                name='timeIn'
-                error={!!touched.timeIn && !!errors.timeIn}
-                helperText={touched.timeIn && errors.timeIn}
-                sx={{ gridColumn: 'span 2', color: 'primary[400]' }}
-              />
-              <TextField
-                fullWidth
-                variant='filled'
-                type='text'
-                label='Officer Name'
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={values.address2}
-                name='officerName'
-                error={!!touched.officerName && !!errors.officerName}
-                helperText={touched.officerName && errors.officerName}
+                value={values.timeOut}
+                name='timeOut'
+                error={!!touched.timeOut && !!errors.timeOut}
+                helperText={touched.timeOut && errors.timeOut}
                 sx={{ gridColumn: 'span 2' }}
               />
             </Box>
@@ -107,30 +131,23 @@ const GateOut = () => {
     </Box>
   );
 };
-// Regexes to handle truck & tanker plates
-const truckPlateRegExp = /^[A-Z]{3} \d{3}[A-Z]$/;
-const tankerNumberRegExp = /^[A-Z]{2} \d{4}$/;
 
 const checkoutSchema = yup.object().shape({
-  truckPlate: yup
-    .string()
-    .matches(truckPlateRegExp, 'Truck number plate is not valid')
-    .required('required'),
-  tankerPlate: yup
-    .string()
-    .matches(tankerNumberRegExp, 'Tanker number plate is not valid')
-    .required('required'),
+  timeIn: yup.string().required('required'),
   timeOut: yup.string().required('required'),
-  officerName: yup
+  cpoMelting: yup.string().required('required'),
+  notes: yup.string().max(250, 'Maximum words exceeded!').required('required'),
+  operatorName: yup
     .string()
-    .max(100, 'Maximum words exceeded!')
+    .max(250, 'Maximum words exceeded!')
     .required('required')
 });
 const initialValues = {
-  truckPlate: '',
-  tankerPlate: '',
-  timeOut: '',
-  officerName: ''
+  timeIn: '',
+  cpoMelting: '',
+  notes: '',
+  operatorName: '',
+  timeOut: ''
 };
 
-export default GateOut;
+export default OffloadingForm;

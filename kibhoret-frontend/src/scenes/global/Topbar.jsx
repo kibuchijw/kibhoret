@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { Box, IconButton, useTheme, Badge } from '@mui/material';
+import { Box, IconButton, useTheme, Badge, Menu, MenuItem } from '@mui/material';
 import { ColorModeContext, tokens } from '../../theme';
 import InputBase from '@mui/material/InputBase';
 import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined';
@@ -7,22 +7,24 @@ import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined';
 import SearchIcon from '@mui/icons-material/Search';
-import NotificationIcon from '@mui/icons-material/Notifications'; // Import the notification icon
+import NotificationIcon from '@mui/icons-material/Notifications';
 
-const Topbar = ({ notification }) => { // Pass notification as props
+const Topbar = ({ notifications }) => {
+  console.log('Notifications type:', typeof notifications);
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const colorMode = useContext(ColorModeContext);
 
-  // State to manage notifications
-  const [notificationsCount, setNotificationsCount] = useState(0); // Use state for notification count
+  const [anchorEl, setAnchorEl] = useState(null); // State for anchor element of menu
 
   // Function to handle badge click and display notifications
-  const handleNotificationClick = () => {
-    // Logic to display notifications, e.g., open a dialog or show a list of notifications
-    console.log('Notification clicked. Notifications:', notification);
-    // Reset notification count
-    setNotificationsCount(0);
+  const handleNotificationClick = (event) => {
+    setAnchorEl(event.currentTarget); // Set anchor element for menu
+  };
+
+  // Function to close the notification menu
+  const handleClose = () => {
+    setAnchorEl(null);
   };
 
   return (
@@ -40,12 +42,29 @@ const Topbar = ({ notification }) => { // Pass notification as props
         <IconButton onClick={colorMode.toggleColorMode}>
           {theme.palette.mode === 'dark' ? <DarkModeOutlinedIcon /> : <LightModeOutlinedIcon />}
         </IconButton>
-        {/* Notification component to display notifications */}
+        {/* Notification menu */}
         <IconButton onClick={handleNotificationClick}>
-          <Badge badgeContent={notificationsCount} color='secondary'>
+          <Badge badgeContent={notifications.length} color='secondary'>
             <NotificationIcon color='action' />
           </Badge>
         </IconButton>
+        <Menu
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={handleClose}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'right'
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'right'
+          }}
+        >
+          {notifications.map((notification, index) => (
+            <MenuItem key={index} onClick={handleClose}>{notification}</MenuItem>
+          ))}
+        </Menu>
         <IconButton>
           <SettingsOutlinedIcon />
         </IconButton>

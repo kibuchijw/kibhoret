@@ -8,7 +8,6 @@ import HomeIcon from '@mui/icons-material/Home';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import FenceIcon from '@mui/icons-material/Fence';
 import ScaleIcon from '@mui/icons-material/Scale';
-import ScienceIcon from '@mui/icons-material/Science';
 import BiotechIcon from '@mui/icons-material/Biotech';
 import Battery0BarIcon from '@mui/icons-material/Battery0Bar';
 import QueryStatsIcon from '@mui/icons-material/QueryStats';
@@ -138,14 +137,7 @@ const Sidebar = () => {
               setSelected={setSelected}
             />
             <Item
-              title='Sampling'
-              to='/sampling'
-              icon={<ScienceIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Item
-              title='Lab'
+              title='Quality Control'
               to='/lab'
               icon={<BiotechIcon />}
               selected={selected}
@@ -160,7 +152,7 @@ const Sidebar = () => {
             />
             <Item
               title='Metrics'
-              to='/metrics'
+              // to='/metrics'
               icon={<QueryStatsIcon />}
               selected={selected}
               setSelected={setSelected}

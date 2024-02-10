@@ -1,10 +1,7 @@
 import { Box, Button, useTheme } from '@mui/material';
 import { tokens } from '../../theme';
-// import { mockTransactions } from "../../data/mockData";
 import DownloadOutlinedIcon from '@mui/icons-material/DownloadOutlined';
-
 import Header from '../../components/Header';
-
 import StatBox from '../../components/StatBox';
 import { Link } from 'react-router-dom';
 
@@ -67,20 +64,22 @@ const Dashboard = () => {
           alignItems='center'
           justifyContent='center'
         >
-          <StatBox
-            title='2'
-            subtitle='Trucks in Process'
-            icon={
-              <img
-                alt='truck icon'
-                width='50px'
-                height='50px'
-                display='flex'
-                src='src/assets/gate.svg'
-                color='colors.greenAccent[600]'
-              />
-            }
-          />
+          <Link to='/gate' style={{ display: 'contents' }}>
+            <StatBox
+              title='2'
+              subtitle='Gate'
+              icon={
+                <img
+                  alt='truck icon'
+                  width='50px'
+                  height='50px'
+                  display='flex'
+                  src='src/assets/gate.svg'
+                  color='colors.greenAccent[600]'
+                />
+              }
+            />
+          </Link>
         </Box>
         <Box
           gridColumn='span 4'
@@ -89,20 +88,22 @@ const Dashboard = () => {
           alignItems='center'
           justifyContent='center'
         >
-          <StatBox
-            title='2'
-            subtitle='Trucks in Process'
-            icon={
-              <img
-                alt='truck icon'
-                width='50px'
-                height='50px'
-                display='flex'
-                src='src/assets/balance-scale.svg'
-                color='colors.greenAccent[600]'
-              />
-            }
-          />
+          <Link to='/weighbridge/in' style={{ display: 'contents' }}>
+            <StatBox
+              title='2'
+              subtitle='IN'
+              icon={
+                <img
+                  alt='truck icon'
+                  width='50px'
+                  height='50px'
+                  display='flex'
+                  src='src/assets/balance-scale.svg'
+                  color='colors.greenAccent[600]'
+                />
+              }
+            />
+          </Link>
         </Box>
 
         {/* ROW 2 */}
@@ -113,21 +114,23 @@ const Dashboard = () => {
           alignItems='center'
           justifyContent='center'
         >
-          <StatBox
-            title='2'
-            subtitle='Trucks in Process'
-            icon={
-              <img
-                title='Lab'
-                alt='lab icon'
-                width='50px'
-                height='50px'
-                display='flex'
-                src='src/assets/sampling.svg'
-                color='colors.greenAccent[600]'
-              />
-            }
-          />
+          <Link to='/lab' style={{ display: 'contents' }}>
+            <StatBox
+              title='2'
+              subtitle='QC'
+              icon={
+                <img
+                  title='Lab'
+                  alt='lab icon'
+                  width='50px'
+                  height='50px'
+                  display='flex'
+                  src='src/assets/lab.svg'
+                  color='colors.greenAccent[600]'
+                />
+              }
+            />
+          </Link>
         </Box>
         <Box
           gridColumn='span 4'
@@ -136,21 +139,22 @@ const Dashboard = () => {
           alignItems='center'
           justifyContent='center'
         >
-          <StatBox
-            title='2'
-            subtitle='Trucks in Process'
-            icon={
-              <img
-                title='Lab'
-                alt='lab icon'
-                width='50px'
-                height='50px'
-                display='flex'
-                src='src/assets/lab.svg'
-                color='colors.greenAccent[600]'
-              />
-            }
-          />
+          <Link to='/offloading' style={{ display: 'contents' }}>
+            <StatBox
+              title='3'
+              subtitle='Offloading'
+              icon={
+                <img
+                  alt='truck icon'
+                  width='50px'
+                  height='50px'
+                  display='flex'
+                  src='src/assets/tanker.svg'
+                  color='colors.greenAccent[600]'
+                />
+              }
+            />
+          </Link>
         </Box>
         <Box
           gridColumn='span 4'
@@ -159,20 +163,22 @@ const Dashboard = () => {
           alignItems='center'
           justifyContent='center'
         >
-          <StatBox
-            title='2'
-            subtitle='Trucks in Process'
-            icon={
-              <img
-                alt='truck icon'
-                width='50px'
-                height='50px'
-                display='flex'
-                src='src/assets/tanker.svg'
-                color='colors.greenAccent[600]'
-              />
-            }
-          />
+          <Link to='/weighbridge/in' style={{ display: 'contents' }}>
+            <StatBox
+              title='2'
+              subtitle='OUT'
+              icon={
+                <img
+                  alt='truck icon'
+                  width='50px'
+                  height='50px'
+                  display='flex'
+                  src='src/assets/balance-scale.svg'
+                  color='colors.greenAccent[600]'
+                />
+              }
+            />
+          </Link>
         </Box>
       </Box>
     </Box>

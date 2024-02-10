@@ -1,4 +1,4 @@
-import { Box, TextField, Slider, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import { Box, TextField, Slider, FormControl, InputLabel, Select, MenuItem, Button } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
 import SendIcon from '@mui/icons-material/Send';
 import { Formik } from 'formik';
@@ -7,7 +7,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import Header from '../../components/Header';
 import { useState } from 'react';
 
-const GateIn = () => {
+const GateForm = () => {
   const isNonMobile = useMediaQuery('(min-width:600px)');
   const [loading, setLoading] = useState(false);
 
@@ -45,7 +45,9 @@ const GateIn = () => {
 
   return (
     <Box m='20px'>
-      <Header title='MAKE ENTRY' subtitle='Record a new delivery' />
+      <Header title='MAKE ENTRY' subtitle='Record a new delivery'>
+        <Button onClick={() => window.history.back()} variant='outlined'>Back</Button>
+      </Header>
 
       <Formik
         onSubmit={handleFormSubmit}
@@ -102,7 +104,7 @@ const GateIn = () => {
                 sx={{ gridColumn: 'span 2' }}
               />
               <Slider
-                fullwidth
+                fullwidth='true'
                 display='flex'
                 type='number'
                 title='Cleanliness'
@@ -251,7 +253,7 @@ const GateIn = () => {
                 loading={loading}
                 disabled={loading} // Disable button during loading
                 loadingPosition='start'
-                endIcon={<SendIcon />}
+                startIcon={<SendIcon />}
               >
                 <span>Create New Entry</span>
               </LoadingButton>
@@ -303,4 +305,4 @@ const initialValues = {
   officerName: ''
 };
 
-export default GateIn;
+export default GateForm;

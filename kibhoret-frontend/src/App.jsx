@@ -4,26 +4,26 @@ import Topbar from './scenes/global/Topbar';
 import Sidebar from './scenes/global/Sidebar';
 import Dashboard from './scenes/dashboard';
 import Trucks from './scenes/trucks';
-import Gate from './scenes/gate';
-import GateIn from './scenes/gateIn';
-import GateOut from './scenes/gateOut';
+import Gate from './scenes/gate/';
+import GateForm from './scenes/gate/gate';
 import WeighBridge from './scenes/weighBridge';
-import WeighBridgeIn from './scenes/weighBridgeIn';
-import WeighBridgeOut from './scenes/weighBridgeOut';
-import Sampling from './scenes/sampling';
+import WeighBridgeIn from './scenes/weighBridge/in';
+import WeighBridgeOut from './scenes/weighBridge/out';
 import Lab from './scenes/lab';
-import Offloading from './scenes/offloading';
+import LabForm from './scenes/lab/lab';
+import Offloading from './scenes/offloading/';
+import OffloadingForm from './scenes/offloading/offloading';
 import LoginForm from './scenes/login';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { ColorModeContext, useMode } from './theme';
-import { verifyToken } from './components/auth';
-import TruckMonitoringService from './components/truckMonitoring';
+import { verifyToken } from './components/Auth';
+import TruckMonitoringService from './components/TruckMonitoring';
 
 function App () {
   const [theme, colorMode] = useMode();
   const [isSidebar, setIsSidebar] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(verifyToken()); // Check if user is logged in
-  const [notification, setNotification] = useState('');
+  const [notification, setNotification] = useState([]);
   const location = useLocation();
 
   const isLoginPage = location.pathname === '/login';
@@ -32,8 +32,9 @@ function App () {
     return isLoggedIn ? element : <Navigate to='/login' replace />;
   };
   const handleNotification = (message) => {
-    setNotification(message);
+    setNotification([message]); // Wrap the message in an array
   };
+
   return (
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
@@ -48,8 +49,7 @@ function App () {
               <Route path='/' element={<PrivateRoute element={<Dashboard />} />} />
               <Route path='/trucks' element={<PrivateRoute element={<Trucks />} />} />
               <Route path='/gate' element={<PrivateRoute element={<Gate />} />} />
-              <Route path='/gate/in' element={<PrivateRoute element={<GateIn />} />} />
-              <Route path='/gate/out' element={<PrivateRoute element={<GateOut />} />} />
+              <Route path='/gate/form' element={<PrivateRoute element={<GateForm />} />} />
               <Route path='/weighbridge' element={<PrivateRoute element={<WeighBridge />} />} />
               <Route
                 path='/weighbridge/in'
@@ -59,9 +59,10 @@ function App () {
                 path='/weighbridge/out'
                 element={<PrivateRoute element={<WeighBridgeOut />} />}
               />
-              <Route path='/sampling' element={<PrivateRoute element={<Sampling />} />} />
               <Route path='/lab' element={<PrivateRoute element={<Lab />} />} />
+              <Route path='/lab/form' element={<PrivateRoute element={<LabForm />} />} />
               <Route path='/offloading' element={<PrivateRoute element={<Offloading />} />} />
+              <Route path='/offloading/form' element={<PrivateRoute element={<OffloadingForm />} />} />
 
               {/* { <Route path="/admin" element={<Admin />} />} */}
               {/* {  <Route path="/faq" element={<FAQ />} />} */}

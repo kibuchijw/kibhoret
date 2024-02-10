@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Typography, useTheme, Button, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
+import { Box, useTheme, Button, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import { tokens } from '../../theme';
 import Header from '../../components/Header';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
+import TruckDetails from './Trucks';
 
-const Trucks = () => {
+const CurrentTrucks = ({ endpoint, link }) => { // Pass the endpoint and link as props
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [trucks, setTrucks] = useState([]);
@@ -18,7 +20,7 @@ const Trucks = () => {
   useEffect(() => {
     const fetchTrucks = async () => {
       try {
-        const response = await axios.get('http://127.0.0.1:8000/api/trucks');
+        const response = await axios.get(endpoint); // Use the passed endpoint
         setTrucks(response.data.all_trucks);
         setTotalTrucks(response.data.total_trucks);
       } catch (error) {
@@ -29,16 +31,35 @@ const Trucks = () => {
     };
 
     fetchTrucks();
-  }, []);
+  }, [endpoint]); // Update useEffect dependency to include endpoint
+
+  // Function to retrieve header name dynamically
+  const extractNameFromEndpoint = (endpoint) => {
+    endpoint = endpoint.replace(/\/+$/, '');
+    const segments = endpoint.split('/');
+    let name = '';
+
+    // Loop through the segments from the end
+    for (let i = segments.length - 1; i >= 0; i--) {
+      if (segments[i].toLowerCase() === 'api') {
+        for (let j = i + 1; j < segments.length; j++) {
+          name += segments[j] + ' ';
+        }
+        name = name.trim();
+        break;
+      }
+    }
+    name = name.toUpperCase();
+    return name;
+  };
+
+  const name = extractNameFromEndpoint(endpoint);
 
   const columns = [
     { field: 'id', headerName: 'ID', flex: 'auto' },
-    { field: 'driver', headerName: 'Driver', headerAlign: 'left', align: 'left', flex: 'auto' },
-    { field: 'cab_plate', headerName: 'Cab Plate', headerAlign: 'left', align: 'left', flex: 'auto' },
-    { field: 'trailer_plate', headerName: 'Trailer Plate', headerAlign: 'left', align: 'left', flex: 'auto' },
     {
-      field: 'actions',
-      headerName: 'Actions',
+      field: 'view', // New column for "View" button
+      headerName: 'View',
       align: 'center',
       headerAlign: 'center',
       sortable: false,
@@ -46,7 +67,23 @@ const Trucks = () => {
       renderCell: (params) => (
         <Button color='secondary' variant='outlined' onClick={() => handleViewClick(params.row)}>View</Button>
       )
-    }
+    },
+    {
+      field: 'edit', // New column for "Edit" button
+      headerName: 'Edit',
+      align: 'center',
+      headerAlign: 'center',
+      sortable: false,
+      width: 120,
+      renderCell: (params) => (
+        <Link to={`${link}`} style={{ textDecoration: 'none' }}>
+          <Button color='secondary' variant='outlined'>Edit</Button>
+        </Link>
+      )
+    },
+    { field: 'cab_plate', headerName: 'Cab Plate', headerAlign: 'left', align: 'left', flex: 'auto' },
+    { field: 'trailer_plate', headerName: 'Trailer Plate', headerAlign: 'left', align: 'left', flex: 'auto' },
+    { field: 'driver', headerName: 'Driver', headerAlign: 'left', align: 'left', flex: 'auto' }
   ];
 
   const handleViewClick = (truck) => {
@@ -60,10 +97,9 @@ const Trucks = () => {
 
   return (
     <Box m='20px'>
-      <Header title='TRUCKS' subtitle={`Trucks within the Company (${totalTrucks})`} />
+      <Header title={name} subtitle={`Trucks at this stage (${totalTrucks})`} />
       <Box
         m='40px 0 0 0'
-        height='75vh'
         sx={{
           '& .MuiDataGrid-root': { border: 'none' },
           '& .MuiDataGrid-cell': { borderBottom: 'none' },
@@ -79,24 +115,7 @@ const Trucks = () => {
       <Dialog open={openDialog} onClose={handleCloseDialog}>
         <DialogTitle>Truck Details</DialogTitle>
         <DialogContent>
-          {selectedTruck && (
-            <Box>
-              <Typography>Driver: {selectedTruck.driver || 'Not yet filled!'}</Typography>
-              <Typography>Cab Plate: {selectedTruck.cab_plate || 'Not yet filled!'}</Typography>
-              <Typography>Trailer Plate: {selectedTruck.trailer_plate || 'Not yet filled!'}</Typography>
-              <Typography>Delivery Number: {selectedTruck.general_info?.delivery_number || 'Not yet filled!'}</Typography>
-              <Typography>Loading Date: {selectedTruck.general_info?.loading_date || 'Not yet filled!'}</Typography>
-              <Typography>Fuel Gauge: {selectedTruck.general_info?.fuel_gauge || 'Not yet filled!'}</Typography>
-              <Typography>Water Reservoir: {selectedTruck.general_info?.water_reservoir || 'Not yet filled!'}</Typography>
-              <Typography>Number of Seals: {selectedTruck.general_info?.number_of_seals || 'Not yet filled!'}</Typography>
-              <Typography>Seals Condition: {selectedTruck.general_info?.seals_condition || 'Not yet filled!'}</Typography>
-              <Typography>Sealing Condition: {selectedTruck.general_info?.sealing_condition || 'Not yet filled!'}</Typography>
-              <Typography>Seals Identification: {selectedTruck.general_info?.seals_identification || 'Not yet filled!'}</Typography>
-              <Typography>Time In: {selectedTruck.general_info?.time_in || 'Not yet filled!'}</Typography>
-              <Typography>Time Out: {selectedTruck.general_info?.time_out || 'Not yet filled!'}</Typography>
-              <Typography>Officer Name: {selectedTruck.general_info?.officer_name || 'Not yet filled!'}</Typography>
-            </Box>
-          )}
+          {selectedTruck && <TruckDetails selectedTruck={selectedTruck} />} {/* Use TruckDetails component */}
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseDialog} color='primary'>Close</Button>
@@ -106,4 +125,4 @@ const Trucks = () => {
   );
 };
 
-export default Trucks;
+export default CurrentTrucks;
