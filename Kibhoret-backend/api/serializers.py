@@ -1,38 +1,52 @@
 from rest_framework import serializers
 from backend.models import *
+from django.contrib.auth import authenticate
 
 
 class GeneralInfoSerializer(serializers.ModelSerializer):
+    """ Serializer for GeneralInfo model
+    """
     class Meta:
         model = GeneralInfo
         fields = '__all__'
 
 
 class WeighBridgeInSerializer(serializers.ModelSerializer):
+    """  Serializer for WeighBridgeIn model
+    """
     class Meta:
         model = WeighBridgeIn
         fields = '__all__'
 
 
 class QualityControlSerializer(serializers.ModelSerializer):
+    """ Serializer for QualityControl model
+    """
     class Meta:
         model = QualityControl
         fields = '__all__'
 
 
 class OffloadingBaySerializer(serializers.ModelSerializer):
+    """ Serializer for OffloadingBay model
+    """
     class Meta:
         model = OffloadingBay
         fields = '__all__'
 
 
 class WeighBridgeOutSerializer(serializers.ModelSerializer):
+    """ Serializer for WeighBridgeOut model
+    """
     class Meta:
         model = WeighBridgeOut
         fields = '__all__'
 
 
 class TruckSerializer(serializers.ModelSerializer):
+    """
+    Serializer for Truck model
+    """
     general_info = GeneralInfoSerializer(allow_null=True, required=False)
     weighbridge_in = WeighBridgeInSerializer(allow_null=True, required=False)
     quality_control = QualityControlSerializer(allow_null=True, required=False)
@@ -45,6 +59,8 @@ class TruckSerializer(serializers.ModelSerializer):
                   'weighbridge_in', 'quality_control', 'tankfarm', 'weighbridge_out']
 
     def create(self, validated_data):
+        """ Method to create a new Truck instance
+        """
         general_info_data = validated_data.pop('general_info')
         general = None
         if general_info_data is not None:
@@ -79,6 +95,8 @@ class TruckSerializer(serializers.ModelSerializer):
         return truck
 
     def update(self, instance, validated_data):
+        """ Method to update an existing Truck instance 
+        """
         instance.driver = validated_data.get('driver', instance.driver)
         instance.cab_plate = validated_data.get(
             'cab_plate', instance.cab_plate)
@@ -206,3 +224,33 @@ class TruckSerializer(serializers.ModelSerializer):
                 weigh_out.save()
 
         return instance
+
+
+class UserLoginSerializer(serializers.Serializer):
+    """ Serializer for user login authentication
+    """
+    username = serializers.CharField()
+    password = serializers.CharField()
+
+    def validate(self, data):
+        """ Method to validate user login credentials
+        """
+        username = data.get('username')
+        password = data.get('password')
+
+        if username and password:
+            user = authenticate(username=username, password=password)
+            if user:
+                if user.is_active:
+                    data['user'] = user
+                else:
+                    raise serializers.ValidationError(
+                        "User account is disabled.")
+            else:
+                raise serializers.ValidationError(
+                    "Unable to log in with provided credentials.")
+        else:
+            raise serializers.ValidationError(
+                "Must include 'username' and 'password'.")
+
+        return data

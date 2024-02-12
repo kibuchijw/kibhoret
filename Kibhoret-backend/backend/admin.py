@@ -3,21 +3,33 @@ from .models import GeneralInfo, WeighBridgeIn, WeighBridgeOut, QualityControl, 
 
 
 class TruckAdmin(admin.ModelAdmin):
+    """ Admin class for Truck model
+    """
     list_display = ('id', 'driver', 'cab_plate')
 
 class GeneralInfoAdmin(admin.ModelAdmin):
+    """ Admin class for GeneralInfo model
+    """
     list_display = ('id', 'truck', 'time_in', 'officer_name')
 
 class WeighBridgeInAdmin(admin.ModelAdmin):
+    """ Admin class for WeighBridgeIn model
+    """
     list_display = ('id', 'truck', 'time_in', 'officer_name')
 
 class QualityControlAdmin(admin.ModelAdmin):
+    """ Admin class for QualityControl model
+    """
     list_display = ('id', 'truck', 'sampling_time', 'result_time', 'inspector_name', 'sampler_name', 'chemist_name')
 
 class OffloadingBayAdmin(admin.ModelAdmin):
+    """ Admin class for OffloadingBay model
+    """
     list_display = ('id', 'truck', 'time_in', 'operator_name')
 
 class WeighBridgeOutAdmin(admin.ModelAdmin):
+    """ Admin class for WeighBridgeOut model
+    """
     list_display = ('id', 'truck', 'time', 'operator_name')
 
 
