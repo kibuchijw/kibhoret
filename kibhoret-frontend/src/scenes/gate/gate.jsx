@@ -1,56 +1,91 @@
-import { Box, TextField, Slider, FormControl, InputLabel, Select, MenuItem, Button } from '@mui/material';
+import { Box, TextField, FormControl, InputLabel, Select, MenuItem, Button } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
 import SendIcon from '@mui/icons-material/Send';
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Header from '../../components/Header';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const GateForm = () => {
   const isNonMobile = useMediaQuery('(min-width:600px)');
   const [loading, setLoading] = useState(false);
+  const [timeIn, setTimeIn] = useState('');
+  const [id, setId] = useState('');
 
-  const handleFormSubmit = (values) => {
-    setLoading(true);
-    console.log(values);
-    setLoading(false); // Set loading state back to false after submission
-  };
-  const handlePO_status = (values) => {
-    console.log(values);
-  };
-
-  const marks = [
-    {
-      value: 0,
-      label: 'Dirty'
-    },
-    {
-      value: 25,
-      label: 'Not so Dirty'
-    },
-    {
-      value: 50,
-      label: 'Clean'
-    },
-    {
-      value: 80,
-      label: 'Very clean'
+  useEffect(() => {
+    const storedTruckId = localStorage.getItem('selectedTruckId');
+    console.log('Stored Truck ID:', storedTruckId); // Log stored truck ID
+    if (storedTruckId) {
+      setId(storedTruckId);
     }
-  ];
+  }, []);
 
-  function valuetext (value) {
-    return `${value}% clean`;
-  }
+  useEffect(() => {
+    const currentTime = new Date().toISOString().slice(11, 16);
+    setTimeIn(currentTime);
+  }, []);
+
+  const handleSubmit = async (values, { setSubmitting }) => {
+    console.log('Form submitted'); // Log that the form is being submitted
+
+    setLoading(true);
+
+    // Set Time Out to current time before sending form data
+    values.time_out = new Date().toISOString().slice(0, 16);
+
+    console.log('Form values:', values); // Log the form values to check for any issues
+
+    const formattedData = {
+      general_info: {
+        delivery_number: values.deliveryNumber,
+        loading_date: values.loadingDate,
+        fuel_gauge: values.fuelGauge,
+        water_reservoir: values.waterReservoir,
+        number_of_seals: values.numberOfSeals,
+        seals_condition: values.sealCondition,
+        sealing_condition: values.sealingCondition,
+        seals_identification: values.sealsIdentification,
+        time_in: values.timeIn,
+        time_out: values.time_out,
+        officer_name: values.officerName
+      }
+    };
+
+    console.log('Formatted data:', formattedData); // Log the formatted data to ensure it's correct
+
+    // Check if the ID is available
+    if (id) {
+      const apiUrl = `http://127.0.0.1:8000/api/truck/${id}/`;
+      console.log('API URL:', apiUrl); // Log the API URL to the console for debugging
+
+      try {
+        // Make the API call to submit the form
+        const response = await axios.put(apiUrl, formattedData, {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+
+        console.log('Truck data updated successfully:', response.data);
+      } catch (error) {
+        console.error('Error updating truck data:', error);
+      }
+    } else {
+      console.error('Truck ID not available.');
+    }
+
+    setLoading(false);
+    setSubmitting(false);
+  };
 
   return (
     <Box m='20px'>
-      <Header title='MAKE ENTRY' subtitle='Record a new delivery'>
-        <Button onClick={() => window.history.back()} variant='outlined'>Back</Button>
-      </Header>
+      <Header title='MAKE ENTRY' subtitle='Record a new delivery' />
 
       <Formik
-        onSubmit={handleFormSubmit}
+        onSubmit={handleSubmit}
         initialValues={initialValues}
         validationSchema={checkoutSchema}
       >
@@ -67,16 +102,16 @@ const GateForm = () => {
               <TextField
                 fullWidth
                 variant='filled'
-                type='time'
-                label='Time In'
+                type='text'
+                label='Delivery Number'
                 onBlur={handleBlur}
                 onChange={handleChange}
-                value={values.timeIn}
-                name='timeIn'
-                error={!!touched.timeIn && !!errors.timeIn}
-                helperText={touched.timeIn && errors.timeIn}
-                sx={{ gridColumn: 'span 2', color: 'primary[400]' }}
+                value={values.deliveryNumber}
+                name='deliveryNumber'
+                error={!!touched.deliveryNumber && !!errors.deliveryNumber}
+                helperText={touched.deliveryNumber && errors.deliveryNumber}
               />
+
               <TextField
                 fullWidth
                 variant='filled'
@@ -88,72 +123,45 @@ const GateForm = () => {
                 name='loadingDate'
                 error={!!touched.loadingDate && !!errors.loadingDate}
                 helperText={touched.loadingDate && errors.loadingDate}
-                sx={{ gridColumn: 'span 2', color: 'primary[400]' }}
               />
-              <TextField
-                fullWidth
-                variant='filled'
-                type='text'
-                label='Delivery Number'
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={values.deliveryNumber}
-                name='deliveryNumber'
-                error={!!touched.deliveryNumber && !!errors.deliveryNumber}
-                helperText={touched.deliveryNumber && errors.deliveryNumber}
-                sx={{ gridColumn: 'span 2' }}
-              />
-              <Slider
-                fullwidth='true'
-                display='flex'
-                type='number'
-                title='Cleanliness'
-                defaultValue={50}
-                getAriaValueText={valuetext}
-                step={5}
-                marks={marks}
-                valueLabelDisplay='on'
-                onBlur={handleBlur}
-                onChange={handleChange}
-                valuetext={values.cleanliness}
-                color='secondary'
-                sx={{
-                  gridColumn: 'span 4'
-                }}
-              />
-              <TextField
-                fullWidth
-                variant='filled'
-                type='text'
-                label='Truck Plate'
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={values.email}
-                name='truckPlate'
-                error={!!touched.truckPlate && !!errors.truckPlate}
-                helperText={touched.truckPlate && errors.truckPlate}
-                sx={{ gridColumn: 'span 2' }}
-              />
-              <TextField
-                fullWidth
-                variant='filled'
-                type='text'
-                label='Tanker Plate'
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={values.tankerPlate}
-                name='tankerPlate'
-                error={!!touched.tankerPlate && !!errors.tankerPlate}
-                helperText={touched.tankerPlate && errors.tankerPlate}
-                sx={{ gridColumn: 'span 2' }}
-              />
+
               <FormControl sx={{ gridColumn: 'span 2' }}>
-                <InputLabel id='noOfSeals'>Number of Seals</InputLabel>
+                <InputLabel id='fuelGauge'>Fuel Gauge</InputLabel>
+                <Select
+                  label='Fuel Gauge'
+                  type='string'
+                  name='fuelGauge'
+                  value={values.fuelGauge}
+                  onChange={handleChange}
+                >
+                  <MenuItem value='empty'>Empty</MenuItem>
+                  <MenuItem value='half'>Half</MenuItem>
+                  <MenuItem value='full'>Full</MenuItem>
+                </Select>
+              </FormControl>
+
+              <FormControl sx={{ gridColumn: 'span 2' }}>
+                <InputLabel id='waterReservoir'>Water Reservoir</InputLabel>
+                <Select
+                  label='Water Reservoir'
+                  type='string'
+                  name='waterReservoir'
+                  value={values.waterReservoir}
+                  onChange={handleChange}
+                >
+                  <MenuItem value='empty'>Empty</MenuItem>
+                  <MenuItem value='half'>Half</MenuItem>
+                  <MenuItem value='full'>Full</MenuItem>
+                </Select>
+              </FormControl>
+
+              <FormControl sx={{ gridColumn: 'span 2' }}>
+                <InputLabel id='numberOfSeals'>Number of Seals</InputLabel>
                 <Select
                   label='Number of Seals'
-                  type='string'
+                  type='number'
                   name='numberOfSeals'
-                  value={values.seals}
+                  value={values.numberOfSeals}
                   onChange={handleChange}
                 >
                   <MenuItem value={1}>One</MenuItem>
@@ -163,19 +171,21 @@ const GateForm = () => {
                   <MenuItem value={5}>Five</MenuItem>
                 </Select>
               </FormControl>
+
               <FormControl sx={{ gridColumn: 'span 2' }}>
                 <InputLabel id='sealCondition'>Seal Condition</InputLabel>
                 <Select
                   label='Seal Condition'
-                  type='boolean'
+                  type='string'
                   name='sealCondition'
                   value={values.sealCondition}
                   onChange={handleChange}
                 >
-                  <MenuItem onClick={() => handlePO_status(true)}>Intact</MenuItem>
-                  <MenuItem onClick={() => handlePO_status(false)}>Tampered</MenuItem>
+                  <MenuItem value='Intact'>Intact</MenuItem>
+                  <MenuItem value='Tampered'>Tampered</MenuItem>
                 </Select>
               </FormControl>
+
               <TextField
                 fullWidth
                 variant='filled'
@@ -187,50 +197,44 @@ const GateForm = () => {
                 name='sealingCondition'
                 error={!!touched.sealingCondition && !!errors.sealingCondition}
                 helperText={touched.sealingCondition && errors.sealingCondition}
-                sx={{ gridColumn: 'span 2' }}
-              />{' '}
+              />
+
               <TextField
                 fullWidth
                 variant='filled'
                 type='text'
-                label='Leakages'
+                label='Seals Identification'
                 onBlur={handleBlur}
                 onChange={handleChange}
-                value={values.leakages}
-                name='leakages'
-                error={!!touched.leakages && !!errors.leakages}
-                helperText={touched.leakages && errors.leakages}
-                sx={{ gridColumn: 'span 2' }}
+                value={values.sealsIdentification}
+                name='sealsIdentification'
+                error={!!touched.sealsIdentification && !!errors.sealsIdentification}
+                helperText={touched.sealsIdentification && errors.sealsIdentification}
               />
-              <FormControl sx={{ gridColumn: 'span 2' }}>
-                <InputLabel id='waterReservoir'>Water Reservoir</InputLabel>
-                <Select
-                  label='Water Reservoir'
-                  type='boolean'
-                  name='waterReservoir'
-                  value={values.waterReservoir}
-                  onChange={handleChange}
-                >
-                  <MenuItem onClick={() => handlePO_status(true)}>Empty</MenuItem>
-                  <MenuItem onClick={() => handlePO_status(false)}>Full</MenuItem>
-                </Select>
-              </FormControl>
-              <FormControl sx={{ gridColumn: 'span 2' }}>
-                <InputLabel id='fuelGauge'>Fuel Gauge</InputLabel>
-                <Select
-                  label='Fuel Gauge'
-                  type='string'
-                  name='fuelGauge'
-                  value={values.fuelGauge}
-                  onChange={handleChange}
-                >
-                  <MenuItem value={0}>Empty</MenuItem>
-                  <MenuItem value={25}>Quarter Full</MenuItem>
-                  <MenuItem value={50}>Half Full</MenuItem>
-                  <MenuItem value={75}>Three Quarters Full</MenuItem>
-                  <MenuItem value={100}>Full</MenuItem>
-                </Select>
-              </FormControl>
+
+              <TextField
+                fullWidth
+                variant='filled'
+                type='time'
+                label='Time In'
+                value={timeIn}
+                onChange={(event) => setTimeIn(event.target.value)}
+                name='timeIn'
+              />
+
+              <TextField
+                fullWidth
+                variant='filled'
+                type='time'
+                label='Time Out'
+                onBlur={handleBlur}
+                onChange={handleChange}
+                value={values.timeOut}
+                name='timeOut'
+                error={!!touched.timeOut && !!errors.timeOut}
+                helperText={touched.timeOut && errors.timeOut}
+              />
+
               <TextField
                 fullWidth
                 variant='filled'
@@ -238,12 +242,12 @@ const GateForm = () => {
                 label='Officer Name'
                 onBlur={handleBlur}
                 onChange={handleChange}
-                value={values.address2}
+                value={values.officerName}
                 name='officerName'
                 error={!!touched.officerName && !!errors.officerName}
                 helperText={touched.officerName && errors.officerName}
-                sx={{ gridColumn: 'span 4' }}
               />
+
             </Box>
             <Box display='flex' justifyContent='end' mt='20px'>
               <LoadingButton
@@ -252,7 +256,6 @@ const GateForm = () => {
                 variant='contained'
                 sx={{ mt: 3, mb: 2 }}
                 loading={loading}
-                disabled={loading} // Disable button during loading
                 loadingPosition='start'
                 startIcon={<SendIcon />}
               >
@@ -266,43 +269,34 @@ const GateForm = () => {
   );
 };
 
-// Regexes to handle delivery number, truck & tanker plates
-const deliveryNumberRegExp = /^[a-zA-Z0-9]{12}$/;
-const truckPlateRegExp = /^[A-Z]{3} \d{3}[A-Z]$/;
-const tankerNumberRegExp = /^[A-Z]{2} \d{4}$/;
-
 const checkoutSchema = yup.object().shape({
-  timeIn: yup.string().required('required'),
-  loadingDate: yup.string().required('required'),
-  cleanliness: yup.string().required('required'),
-  deliveryNumber: yup
-    .string()
-    .matches(deliveryNumberRegExp, 'Delivery number is not valid')
-    .required('required'),
-  truckPlate: yup
-    .string()
-    .matches(truckPlateRegExp, 'Truck number plate is not valid')
-    .required('required'),
-  tankerPlate: yup
-    .string()
-    .matches(tankerNumberRegExp, 'Tanker number plate is not valid')
-    .required('required'),
-  sealingCondition: yup.string().max(100, 'Maximum words exceeded!').required('required'),
-  leakages: yup.string().max(100, 'Maximum words exceeded!').required('required'),
-  officerName: yup.string().max(100, 'Maximum words exceeded!').required('required')
+  timeIn: yup.string().required('Time In is required'),
+  // timeOut: yup.string().required('Time Out is required'),
+  loadingDate: yup.string().required('Loading Date is required'),
+  deliveryNumber: yup.string().required('Delivery Number is required'),
+  // cleanliness: yup.string().required('Cleanliness is required'),
+  numberOfSeals: yup.number().required('Number of Seals is required'),
+  sealCondition: yup.string().required('Seal Condition is required'),
+  sealingCondition: yup.string().required('Sealing Condition is required'),
+  sealsIdentification: yup.string().required('Seals Identification is required'),
+  leakages: yup.string().required('Leakages is required'),
+  fuelGauge: yup.string().required('Fuel Gauge is required'),
+  waterReservoir: yup.string().required('Water Reservoir is required'),
+  officerName: yup.string().required('Officer Name is required')
 });
+
+// Adjust the initial values to match the fields in GeneralInfo
 const initialValues = {
-  timeIn: '',
-  loadingDate: '',
   deliveryNumber: '',
-  cleanliness: '',
-  truckPlate: '',
-  tankerPlate: '',
-  seals: '',
+  loadingDate: '',
+  fuelGauge: '',
+  waterReservoir: '',
+  numberOfSeals: '',
   sealCondition: '',
   sealingCondition: '',
-  leakages: '',
-  fuelGauge: '',
+  sealsIdentification: '',
+  timeIn: '',
+  timeOut: '',
   officerName: ''
 };
 

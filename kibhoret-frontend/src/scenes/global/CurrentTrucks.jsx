@@ -77,7 +77,7 @@ const CurrentTrucks = ({ endpoint, link }) => { // Pass the endpoint and link as
       width: 120,
       renderCell: (params) => (
         <Link to={`${link}`} style={{ textDecoration: 'none' }}>
-          <Button color='secondary' variant='outlined'>Edit</Button>
+          <Button color='secondary' variant='outlined' onClick={() => handleViewClick(params.row.id)}>Edit</Button>
         </Link>
       )
     },
@@ -86,9 +86,11 @@ const CurrentTrucks = ({ endpoint, link }) => { // Pass the endpoint and link as
     { field: 'driver', headerName: 'Driver', headerAlign: 'left', align: 'left', flex: 'auto' }
   ];
 
-  const handleViewClick = (truck) => {
-    setSelectedTruck(truck);
+  const handleViewClick = (truckId) => {
+    setSelectedTruck(truckId);
     setOpenDialog(true);
+    // Store the ID of the selected truck in local storage
+    localStorage.setItem('selectedTruckId', truckId);
   };
 
   const handleCloseDialog = () => {

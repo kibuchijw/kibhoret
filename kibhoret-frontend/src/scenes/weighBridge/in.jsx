@@ -1,16 +1,30 @@
-import { Box, Button, TextField } from '@mui/material';
+import React from 'react';
+import { Box, TextField } from '@mui/material';
+import LoadingButton from '@mui/lab/LoadingButton';
 import SendIcon from '@mui/icons-material/Send';
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Header from '../../components/Header';
 import { Link } from 'react-router-dom';
+import useFormData from '../../components/UseFormData';
+import Alert from '@mui/material/Alert';
+
 const WeighBridgeIn = () => {
   const isNonMobile = useMediaQuery('(min-width:600px)');
-
-  const handleFormSubmit = (values) => {
-    console.log(values);
-  };
+  const {
+    id,
+    setId,
+    submissionMessage,
+    setSubmissionMessage,
+    time_in,
+    setTimein,
+    time_out,
+    setTimeOut,
+    loading,
+    setLoading,
+    handleFormSubmit
+  } = useFormData();
 
   return (
     <Box m='20px'>
@@ -20,6 +34,17 @@ const WeighBridgeIn = () => {
           subtitle='Record a new truck entry'
         />
       </Link>
+      {submissionMessage && (
+        <Box mt={2}>
+          {submissionMessage.startsWith('An error')
+            ? (
+              <Alert severity='error'>{submissionMessage}</Alert>
+              )
+            : (
+              <Alert severity='success'>{submissionMessage}</Alert>
+              )}
+        </Box>
+      )}
       <Formik
         onSubmit={handleFormSubmit}
         initialValues={initialValues}
@@ -45,29 +70,55 @@ const WeighBridgeIn = () => {
               <TextField
                 fullWidth
                 variant='filled'
-                type='time'
-                label='Time In'
+                type='text'
+                label='Delivery Number'
                 onBlur={handleBlur}
                 onChange={handleChange}
-                value={values.timeIn}
-                name='timeIn'
-                error={!!touched.timeIn && !!errors.timeIn}
-                helperText={touched.timeIn && errors.timeIn}
+                value={values.delivery_number}
+                name='delivery_number'
+                error={!!touched.delivery_number && !!errors.delivery_number}
+                helperText={touched.delivery_number && errors.delivery_number}
                 sx={{ gridColumn: 'span 2' }}
               />
               <TextField
                 fullWidth
                 variant='filled'
-                type='number'
-                label='Truck Weight'
+                type='text'
+                label='First Weight'
                 onBlur={handleBlur}
                 onChange={handleChange}
-                value={values.truckWeight}
-                name='truckWeight'
-                error={!!touched.truckWeight && !!errors.truckWeight}
-                helperText={touched.truckWeight && errors.truckWeight}
+                value={values.first_weight}
+                name='first_weight'
+                error={!!touched.first_weight && !!errors.first_weight}
+                helperText={touched.first_weight && errors.first_weight}
                 sx={{ gridColumn: 'span 2' }}
               />
+              {/* <TextField
+                fullWidth
+                variant='filled'
+                type='datetime-local'
+                label='Time In'
+                onBlur={handleBlur}
+                onChange={handleChange}
+                value={values.time_in}
+                name='time_in'
+                error={!!touched.time_in && !!errors.time_in}
+                helperText={touched.time_in && errors.time_in}
+                sx={{ gridColumn: 'span 2' }}
+              />
+              <TextField
+                fullWidth
+                variant='filled'
+                type='datetime-local'
+                label='Time Out'
+                onBlur={handleBlur}
+                onChange={handleChange}
+                value={values.time_out}
+                name='time_out'
+                error={!!touched.time_out && !!errors.time_out}
+                helperText={touched.time_out && errors.time_out}
+                sx={{ gridColumn: 'span 2' }}
+              /> */}
               <TextField
                 fullWidth
                 variant='filled'
@@ -75,11 +126,11 @@ const WeighBridgeIn = () => {
                 label='Operator Name'
                 onBlur={handleBlur}
                 onChange={handleChange}
-                value={values.operatorName}
-                name='operatorName'
-                error={!!touched.operatorName && !!errors.operatorName}
-                helperText={touched.operatorName && errors.operatorName}
-                sx={{ gridColumn: 'span 2', color: 'primary[400]' }}
+                value={values.operator_name}
+                name='operator_name'
+                error={!!touched.operator_name && !!errors.operator_name}
+                helperText={touched.operator_name && errors.operator_name}
+                sx={{ gridColumn: 'span 2' }}
               />
               <TextField
                 fullWidth
@@ -88,22 +139,26 @@ const WeighBridgeIn = () => {
                 label='Officer Name'
                 onBlur={handleBlur}
                 onChange={handleChange}
-                value={values.address2}
-                name='officerName'
-                error={!!touched.officerName && !!errors.officerName}
-                helperText={touched.officerName && errors.officerName}
+                value={values.officer_name}
+                name='officer_name'
+                error={!!touched.officer_name && !!errors.officer_name}
+                helperText={touched.officer_name && errors.officer_name}
                 sx={{ gridColumn: 'span 2' }}
               />
             </Box>
             <Box display='flex' justifyContent='end' mt='20px'>
-              <Button
+              <LoadingButton
                 type='submit'
-                color='secondary'
+                fullWidth
                 variant='contained'
-                endIcon={<SendIcon />}
+                sx={{ mt: 3, mb: 2 }}
+                color='secondary'
+                loading={loading}
+                loadingPosition='start'
+                startIcon={<SendIcon />}
               >
-                Create New Entry
-              </Button>
+                <span>Create New entry</span>
+              </LoadingButton>
             </Box>
           </form>
         )}
@@ -113,22 +168,21 @@ const WeighBridgeIn = () => {
 };
 
 const checkoutSchema = yup.object().shape({
-  timeIn: yup.string().required('required'),
-  truckWeight: yup.number().required('required'),
-  operatorName: yup
-    .string()
-    .max(100, 'Maximum words exceeded!')
-    .required('required'),
-  officerName: yup
-    .string()
-    .max(100, 'Maximum words exceeded!')
-    .required('required')
+  delivery_number: yup.string().required('Delivery Number is required'),
+  first_weight: yup.number().required('First Weight is required'),
+  // timeIn: yup.string().required('Time In is required'),
+  // timeOut: yup.string().required('Time Out is required'),
+  operator_name: yup.string().required('Operator Name is required'),
+  officer_name: yup.string().required('Officer Name is required')
 });
+
 const initialValues = {
-  timeIn: '',
-  truckWeight: '',
-  operatorName: '',
-  officerName: ''
+  delivery_number: '',
+  first_weight: '',
+  // time_in: '',
+  // time_out: '',
+  operator_name: '',
+  officer_name: ''
 };
 
 export default WeighBridgeIn;
