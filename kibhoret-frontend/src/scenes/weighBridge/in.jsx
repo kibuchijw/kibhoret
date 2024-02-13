@@ -39,10 +39,10 @@ const WeighBridgeIn = () => {
           {submissionMessage.startsWith('An error')
             ? (
               <Alert severity='error'>{submissionMessage}</Alert>
-              )
+            )
             : (
               <Alert severity='success'>{submissionMessage}</Alert>
-              )}
+            )}
         </Box>
       )}
       <Formik
@@ -149,7 +149,6 @@ const WeighBridgeIn = () => {
             <Box display='flex' justifyContent='end' mt='20px'>
               <LoadingButton
                 type='submit'
-                fullWidth
                 variant='contained'
                 sx={{ mt: 3, mb: 2 }}
                 color='secondary'

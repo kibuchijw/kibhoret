@@ -1,36 +1,54 @@
-import {
-  Box,
-  Button,
-  TextField,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select
-} from '@mui/material';
+import { Box, TextField, Alert } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Header from '../../components/Header';
+import useFormData from '../../components/UseFormData';
 
 const OffloadingForm = () => {
   const isNonMobile = useMediaQuery('(min-width:600px)');
+  const {
+    submissionMessage,
+    setSubmissionMessage,
+    time_in,
+    setTimeIn,
+    time_out,
+    setTimeOut,
+    loading,
+    handleFormSubmit
+  } = useFormData();
 
-  const handleFormSubmit = (values) => {
-    console.log(values);
-  };
-  const handlePO_status = (values) => {
-    console.log(values);
-  };
+  const validationSchema = yup.object().shape({
+    time_in: yup.string().required('Time In is required'),
+    time_out: yup.string().required('Time Out is required'),
+    notes: yup.string().max(250, 'Maximum words exceeded!').required('Notes is required'),
+    operator_name: yup.string().max(250, 'Maximum words exceeded!').required('Operator Name is required')
+  });
 
   return (
     <Box m='20px'>
       <Header title='OFFLOADING BAY' subtitle='Record new offload entry' />
-
+      {submissionMessage && (
+        <Box mt={2}>
+          {submissionMessage.startsWith('Data submitted successfully') && (
+            <Alert severity='success'>{submissionMessage}</Alert>
+          )}
+          {submissionMessage.startsWith('An error') && (
+            <Alert severity='error'>{submissionMessage}</Alert>
+          )}
+        </Box>
+      )}
       <Formik
+        initialValues={{
+          time_in: '',
+          time_out: '',
+          notes: '',
+          operator_name: ''
+        }}
+        validationSchema={validationSchema}
         onSubmit={handleFormSubmit}
-        initialValues={initialValues}
-        validationSchema={checkoutSchema}
       >
         {({
           values,
@@ -38,7 +56,9 @@ const OffloadingForm = () => {
           touched,
           handleBlur,
           handleChange,
-          handleSubmit
+          handleSubmit,
+          isSubmitting,
+          isValid
         }) => (
           <form onSubmit={handleSubmit}>
             <Box
@@ -52,29 +72,29 @@ const OffloadingForm = () => {
               <TextField
                 fullWidth
                 variant='filled'
-                type='time'
+                type='datetime-local'
                 label='Time In'
                 onBlur={handleBlur}
                 onChange={handleChange}
-                value={values.timeIn}
-                name='timeIn'
-                error={!!touched.timeIn && !!errors.timeIn}
-                helperText={touched.timeIn && errors.timeIn}
+                value={values.time_in}
+                name='time_in'
+                error={touched.time_in && !!errors.time_in}
+                helperText={touched.time_in && errors.time_in}
                 sx={{ gridColumn: 'span 2' }}
               />
-              <FormControl sx={{ gridColumn: 'span 2' }}>
-                <InputLabel id='hotOilSpurging'>Hot oil Spurging</InputLabel>
-                <Select
-                  label='Hot oil Spurging'
-                  type='boolean'
-                  name='cpoMelting'
-                  value={values.cpoMelting}
-                  onChange={handleChange}
-                >
-                  <MenuItem onClick={() => handlePO_status(true)}>Yes</MenuItem>
-                  <MenuItem onClick={() => handlePO_status(false)}>no</MenuItem>
-                </Select>
-              </FormControl>
+              <TextField
+                fullWidth
+                variant='filled'
+                type='datetime-local'
+                label='Time Out'
+                onBlur={handleBlur}
+                onChange={handleChange}
+                value={values.time_out}
+                name='time_out'
+                error={touched.time_out && !!errors.time_out}
+                helperText={touched.time_out && errors.time_out}
+                sx={{ gridColumn: 'span 2' }}
+              />
               <TextField
                 fullWidth
                 variant='filled'
@@ -84,9 +104,9 @@ const OffloadingForm = () => {
                 onChange={handleChange}
                 value={values.notes}
                 name='notes'
-                error={!!touched.notes && !!errors.notes}
+                error={touched.notes && !!errors.notes}
                 helperText={touched.notes && errors.notes}
-                sx={{ gridColumn: 'span 2' }}
+                sx={{ gridColumn: 'span 4' }}
               />
               <TextField
                 fullWidth
@@ -95,59 +115,31 @@ const OffloadingForm = () => {
                 label='Operator Name'
                 onBlur={handleBlur}
                 onChange={handleChange}
-                value={values.operatorName}
-                name='operatorName'
-                error={!!touched.operatorName && !!errors.operatorName}
-                helperText={touched.operatorName && errors.operatorName}
-                sx={{ gridColumn: 'span 2', color: 'primary[400]' }}
-              />
-              <TextField
-                fullWidth
-                variant='filled'
-                type='time'
-                label='Time Out'
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={values.timeOut}
-                name='timeOut'
-                error={!!touched.timeOut && !!errors.timeOut}
-                helperText={touched.timeOut && errors.timeOut}
-                sx={{ gridColumn: 'span 2' }}
+                value={values.operator_name}
+                name='operator_name'
+                error={touched.operator_name && !!errors.operator_name}
+                helperText={touched.operator_name && errors.operator_name}
+                sx={{ gridColumn: 'span 4', color: 'primary[400]' }}
               />
             </Box>
-            <Box display='flex' justifyContent='end' mt='20px'>
-              <Button
+            <Box display='flex' justifyContent='end' mt='20px' mb='20px'>
+              <LoadingButton
                 type='submit'
                 color='secondary'
                 variant='contained'
-                endIcon={<SendIcon />}
+                loading={loading}
+                disabled={loading || !isValid}
+                loadingPosition='start'
+                startIcon={<SendIcon />}
               >
-                Create New Entry
-              </Button>
+                <span>Create New Entry</span>
+              </LoadingButton>
             </Box>
           </form>
         )}
       </Formik>
     </Box>
   );
-};
-
-const checkoutSchema = yup.object().shape({
-  timeIn: yup.string().required('required'),
-  timeOut: yup.string().required('required'),
-  cpoMelting: yup.string().required('required'),
-  notes: yup.string().max(250, 'Maximum words exceeded!').required('required'),
-  operatorName: yup
-    .string()
-    .max(250, 'Maximum words exceeded!')
-    .required('required')
-});
-const initialValues = {
-  timeIn: '',
-  cpoMelting: '',
-  notes: '',
-  operatorName: '',
-  timeOut: ''
 };
 
 export default OffloadingForm;

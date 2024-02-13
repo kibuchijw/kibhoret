@@ -17,13 +17,31 @@ const useFormData = () => {
   }, []);
 
   const handleFormSubmit = async (values) => {
+    console.log('Starting form submission...');
     if (id) {
       const apiUrl = `http://127.0.0.1:8000/api/truck/${id}/`;
       console.log('API URL:', apiUrl);
       try {
+        console.log('Submitting data...');
         setLoading(true);
         const response = await axios.get(apiUrl);
+        console.log('Response:', response);
         const existingData = response.data;
+
+        let fieldNameToUpdate = '';
+
+        // Loop through the keys in existingData to find the first null field
+        for (const key in existingData) {
+          if (existingData[key] === null) {
+            fieldNameToUpdate = key;
+            break; // Found the first null field, break out of the loop
+          }
+        }
+
+        if (fieldNameToUpdate === '') {
+          console.error('No null field found in existing data.');
+          return;
+        }
 
         const formattedValues = {
           ...values,
@@ -33,7 +51,7 @@ const useFormData = () => {
 
         const updatedData = {
           ...existingData,
-          weighbridge_in: formattedValues
+          [fieldNameToUpdate]: formattedValues
         };
 
         await axios.put(apiUrl, updatedData);

@@ -1,303 +1,307 @@
-import { Box, TextField, FormControl, InputLabel, Select, MenuItem, Button } from '@mui/material';
-import LoadingButton from '@mui/lab/LoadingButton';
+import React from 'react';
+import {
+  Box,
+  TextField,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Alert
+} from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
-import { Formik } from 'formik';
-import * as yup from 'yup';
+import LoadingButton from '@mui/lab/LoadingButton';
+import * as Yup from 'yup';
+import { useFormik } from 'formik';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Header from '../../components/Header';
-import { useState, useEffect } from 'react';
-import axios from 'axios';
+import useFormData from '../../components/UseFormData';
+
+const validationSchema = Yup.object().shape({
+  delivery_number: Yup.string().required('Delivery number is required'),
+  loading_date: Yup.string().required('Loading date is required'),
+  fuel_gauge: Yup.string().required('Fuel gauge is required'),
+  water_reservoir: Yup.string().required('Water reservoir is required'),
+  number_of_seals: Yup.number()
+    .required('Number of seals is required')
+    .positive('Number of seals must be positive')
+    .integer('Number of seals must be an integer'),
+  seals_condition: Yup.string().required('Seals condition is required'),
+  sealing_condition: Yup.string().required('Sealing condition is required'),
+  seals_identification: Yup.string().required(
+    'Seals identification is required'
+  ),
+  officer_name: Yup.string().required('Officer name is required')
+});
 
 const GateForm = () => {
   const isNonMobile = useMediaQuery('(min-width:600px)');
-  const [loading, setLoading] = useState(false);
-  const [timeIn, setTimeIn] = useState('');
-  const [id, setId] = useState('');
+  const {
+    id,
+    setId,
+    submissionMessage,
+    setSubmissionMessage,
+    time_in,
+    setTimeIn,
+    time_out,
+    setTimeOut,
+    loading,
+    setLoading,
+    handleFormSubmit
+  } = useFormData();
 
-  useEffect(() => {
-    const storedTruckId = localStorage.getItem('selectedTruckId');
-    console.log('Stored Truck ID:', storedTruckId); // Log stored truck ID
-    if (storedTruckId) {
-      setId(storedTruckId);
-    }
-  }, []);
-
-  useEffect(() => {
-    const currentTime = new Date().toISOString().slice(11, 16);
-    setTimeIn(currentTime);
-  }, []);
-
-  const handleSubmit = async (values, { setSubmitting }) => {
-    console.log('Form submitted'); // Log that the form is being submitted
-
-    setLoading(true);
-
-    // Set Time Out to current time before sending form data
-    values.time_out = new Date().toISOString().slice(0, 16);
-
-    console.log('Form values:', values); // Log the form values to check for any issues
-
-    const formattedData = {
-      general_info: {
-        delivery_number: values.deliveryNumber,
-        loading_date: values.loadingDate,
-        fuel_gauge: values.fuelGauge,
-        water_reservoir: values.waterReservoir,
-        number_of_seals: values.numberOfSeals,
-        seals_condition: values.sealCondition,
-        sealing_condition: values.sealingCondition,
-        seals_identification: values.sealsIdentification,
-        time_in: values.timeIn,
-        time_out: values.time_out,
-        officer_name: values.officerName
-      }
-    };
-
-    console.log('Formatted data:', formattedData); // Log the formatted data to ensure it's correct
-
-    // Check if the ID is available
-    if (id) {
-      const apiUrl = `http://127.0.0.1:8000/api/truck/${id}/`;
-      console.log('API URL:', apiUrl); // Log the API URL to the console for debugging
-
+  const formik = useFormik({
+    initialValues: {
+      delivery_number: '',
+      loading_date: '',
+      fuel_gauge: '',
+      water_reservoir: '',
+      number_of_seals: '',
+      seals_condition: '',
+      sealing_condition: '',
+      seals_identification: '',
+      officer_name: ''
+    },
+    validationSchema,
+    onSubmit: async (values) => {
       try {
-        // Make the API call to submit the form
-        const response = await axios.put(apiUrl, formattedData, {
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        });
-
-        console.log('Truck data updated successfully:', response.data);
+        await handleFormSubmit(values);
+        setSubmissionMessage('Data submitted successfully!');
+        console.log('Data submitted successfully!');
       } catch (error) {
-        console.error('Error updating truck data:', error);
+        setSubmissionMessage('An error occurred while submitting data.');
+        console.error('Error submitting data:', error);
       }
-    } else {
-      console.error('Truck ID not available.');
     }
-
-    setLoading(false);
-    setSubmitting(false);
-  };
+  });
 
   return (
     <Box m='20px'>
       <Header title='MAKE ENTRY' subtitle='Record a new delivery' />
-
-      <Formik
-        onSubmit={handleSubmit}
-        initialValues={initialValues}
-        validationSchema={checkoutSchema}
+      <Box
+        component='form'
+        onSubmit={formik.handleSubmit}
+        display='grid'
+        gap='30px'
+        gridTemplateColumns='repeat(4, minmax(0, 1fr))'
+        sx={{
+          '& > div': { gridColumn: isNonMobile ? undefined : 'span 4' }
+        }}
       >
-        {({ values, errors, touched, handleBlur, handleChange, handleSubmit }) => (
-          <form onSubmit={handleSubmit}>
-            <Box
-              display='grid'
-              gap='30px'
-              gridTemplateColumns='repeat(4, minmax(0, 1fr))'
-              sx={{
-                '& > div': { gridColumn: isNonMobile ? undefined : 'span 4' }
-              }}
-            >
-              <TextField
-                fullWidth
-                variant='filled'
-                type='text'
-                label='Delivery Number'
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={values.deliveryNumber}
-                name='deliveryNumber'
-                error={!!touched.deliveryNumber && !!errors.deliveryNumber}
-                helperText={touched.deliveryNumber && errors.deliveryNumber}
-              />
+        <TextField
+          variant='filled'
+          type='text'
+          label='Delivery Number'
+          name='delivery_number'
+          value={formik.values.delivery_number}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          error={
+            formik.touched.delivery_number &&
+            Boolean(formik.errors.delivery_number)
+          }
+          helperText={
+            formik.touched.delivery_number && formik.errors.delivery_number
+          }
+          placeholder='Delivery Number'
+          fullWidth
+          margin='normal'
+          sx={{ gridColumn: 'span 2', color: 'primary[400]' }}
+        />
+        <TextField
+          variant='filled'
+          type='date'
+          label='Loading Date'
+          name='loading_date'
+          value={formik.values.loading_date}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          error={
+            formik.touched.loading_date && Boolean(formik.errors.loading_date)
+          }
+          helperText={formik.touched.loading_date && formik.errors.loading_date}
+          placeholder='Loading Date'
+          fullWidth
+          margin='normal'
+          sx={{ gridColumn: 'span 2', color: 'primary[400]' }}
+        />
+        <FormControl variant='filled' fullWidth margin='normal' sx={{ gridColumn: 'span 2', color: 'primary[400]' }}>
+          <InputLabel>Fuel Gauge</InputLabel>
+          <Select
+            label='Fuel Gauge'
+            name='fuel_gauge'
+            value={formik.values.fuel_gauge}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            error={
+              formik.touched.fuel_gauge && Boolean(formik.errors.fuel_gauge)
+            }
 
-              <TextField
-                fullWidth
-                variant='filled'
-                type='date'
-                label='Loading Date'
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={values.loadingDate}
-                name='loadingDate'
-                error={!!touched.loadingDate && !!errors.loadingDate}
-                helperText={touched.loadingDate && errors.loadingDate}
-              />
+          >
+            <MenuItem value=''>
+              <em>Select Fuel Gauge</em>
+            </MenuItem>
+            <MenuItem value='empty'>Empty</MenuItem>
+            <MenuItem value='half'>Half</MenuItem>
+            <MenuItem value='full'>Full</MenuItem>
+          </Select>
+          {formik.touched.fuel_gauge && formik.errors.fuel_gauge && (
+            <Alert severity='error'>{formik.errors.fuel_gauge}</Alert>
+          )}
+        </FormControl>
+        <FormControl variant='filled' fullWidth margin='normal' sx={{ gridColumn: 'span 2', color: 'primary[400]' }}>
+          <InputLabel>Water Reservoir</InputLabel>
+          <Select
+            label='Water Reservoir'
+            name='water_reservoir'
+            value={formik.values.water_reservoir}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            error={
+              formik.touched.water_reservoir &&
+              Boolean(formik.errors.water_reservoir)
+            }
+          >
+            <MenuItem value=''>
+              <em>Select Water Reservoir</em>
+            </MenuItem>
+            <MenuItem value='empty'>Empty</MenuItem>
+            <MenuItem value='half'>Half</MenuItem>
+            <MenuItem value='full'>Full</MenuItem>
+          </Select>
+          {formik.touched.water_reservoir && formik.errors.water_reservoir && (
+            <Alert severity='error'>{formik.errors.water_reservoir}</Alert>
+          )}
+        </FormControl>
+        <TextField
+          variant='filled'
+          type='number'
+          label='Number of Seals'
+          name='number_of_seals'
+          value={formik.values.number_of_seals}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          error={
+            formik.touched.number_of_seals &&
+            Boolean(formik.errors.number_of_seals)
+          }
+          helperText={
+            formik.touched.number_of_seals && formik.errors.number_of_seals
+          }
+          placeholder='Number of Seals'
+          fullWidth
+          margin='normal'
+          sx={{ gridColumn: 'span 2', color: 'primary[400]' }}
+        />
+        <TextField
+          variant='filled'
+          type='text'
+          label='Seals Condition'
+          name='seals_condition'
+          value={formik.values.seals_condition}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          error={
+            formik.touched.seals_condition &&
+            Boolean(formik.errors.seals_condition)
+          }
+          helperText={
+            formik.touched.seals_condition && formik.errors.seals_condition
+          }
+          placeholder='Seals Condition'
+          fullWidth
+          margin='normal'
+          sx={{ gridColumn: 'span 2', color: 'primary[400]' }}
+        />
+        <TextField
+          variant='filled'
+          type='text'
+          label='Seals Identification'
+          name='seals_identification'
+          value={formik.values.seals_identification}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          error={
+            formik.touched.seals_identification &&
+            Boolean(formik.errors.seals_identification)
+          }
+          helperText={
+            formik.touched.seals_identification &&
+            formik.errors.seals_identification
+          }
+          placeholder='Seals Identification'
+          fullWidth
+          multiline
+          rows={3}
+          margin='normal'
+          sx={{ gridColumn: 'span 4', color: 'primary[400]' }}
+        />
+        <TextField
+          variant='filled'
+          type='text'
+          label='Sealing Condition'
+          name='sealing_condition'
+          value={formik.values.sealing_condition}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          error={
+            formik.touched.sealing_condition &&
+            Boolean(formik.errors.sealing_condition)
+          }
+          helperText={
+            formik.touched.sealing_condition && formik.errors.sealing_condition
+          }
+          placeholder='Sealing Condition'
+          fullWidth
+          margin='normal'
+          sx={{ gridColumn: 'span 2', color: 'primary[400]' }}
+        />
 
-              <FormControl sx={{ gridColumn: 'span 2' }}>
-                <InputLabel id='fuelGauge'>Fuel Gauge</InputLabel>
-                <Select
-                  label='Fuel Gauge'
-                  type='string'
-                  name='fuelGauge'
-                  value={values.fuelGauge}
-                  onChange={handleChange}
-                >
-                  <MenuItem value='empty'>Empty</MenuItem>
-                  <MenuItem value='half'>Half</MenuItem>
-                  <MenuItem value='full'>Full</MenuItem>
-                </Select>
-              </FormControl>
+        <TextField
+          variant='filled'
+          type='text'
+          label='Officer Name'
+          name='officer_name'
+          value={formik.values.officer_name}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          error={
+            formik.touched.officer_name && Boolean(formik.errors.officer_name)
+          }
+          helperText={formik.touched.officer_name && formik.errors.officer_name}
+          placeholder='Officer Name'
+          fullWidth
+          margin='normal'
+          sx={{ gridColumn: 'span 2', color: 'primary[400]' }}
+        />
 
-              <FormControl sx={{ gridColumn: 'span 2' }}>
-                <InputLabel id='waterReservoir'>Water Reservoir</InputLabel>
-                <Select
-                  label='Water Reservoir'
-                  type='string'
-                  name='waterReservoir'
-                  value={values.waterReservoir}
-                  onChange={handleChange}
-                >
-                  <MenuItem value='empty'>Empty</MenuItem>
-                  <MenuItem value='half'>Half</MenuItem>
-                  <MenuItem value='full'>Full</MenuItem>
-                </Select>
-              </FormControl>
-
-              <FormControl sx={{ gridColumn: 'span 2' }}>
-                <InputLabel id='numberOfSeals'>Number of Seals</InputLabel>
-                <Select
-                  label='Number of Seals'
-                  type='number'
-                  name='numberOfSeals'
-                  value={values.numberOfSeals}
-                  onChange={handleChange}
-                >
-                  <MenuItem value={1}>One</MenuItem>
-                  <MenuItem value={2}>Two</MenuItem>
-                  <MenuItem value={3}>Three</MenuItem>
-                  <MenuItem value={4}>Four</MenuItem>
-                  <MenuItem value={5}>Five</MenuItem>
-                </Select>
-              </FormControl>
-
-              <FormControl sx={{ gridColumn: 'span 2' }}>
-                <InputLabel id='sealCondition'>Seal Condition</InputLabel>
-                <Select
-                  label='Seal Condition'
-                  type='string'
-                  name='sealCondition'
-                  value={values.sealCondition}
-                  onChange={handleChange}
-                >
-                  <MenuItem value='Intact'>Intact</MenuItem>
-                  <MenuItem value='Tampered'>Tampered</MenuItem>
-                </Select>
-              </FormControl>
-
-              <TextField
-                fullWidth
-                variant='filled'
-                type='text'
-                label='Sealing Condition'
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={values.sealingCondition}
-                name='sealingCondition'
-                error={!!touched.sealingCondition && !!errors.sealingCondition}
-                helperText={touched.sealingCondition && errors.sealingCondition}
-              />
-
-              <TextField
-                fullWidth
-                variant='filled'
-                type='text'
-                label='Seals Identification'
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={values.sealsIdentification}
-                name='sealsIdentification'
-                error={!!touched.sealsIdentification && !!errors.sealsIdentification}
-                helperText={touched.sealsIdentification && errors.sealsIdentification}
-              />
-
-              <TextField
-                fullWidth
-                variant='filled'
-                type='time'
-                label='Time In'
-                value={timeIn}
-                onChange={(event) => setTimeIn(event.target.value)}
-                name='timeIn'
-              />
-
-              <TextField
-                fullWidth
-                variant='filled'
-                type='time'
-                label='Time Out'
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={values.timeOut}
-                name='timeOut'
-                error={!!touched.timeOut && !!errors.timeOut}
-                helperText={touched.timeOut && errors.timeOut}
-              />
-
-              <TextField
-                fullWidth
-                variant='filled'
-                type='text'
-                label='Officer Name'
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={values.officerName}
-                name='officerName'
-                error={!!touched.officerName && !!errors.officerName}
-                helperText={touched.officerName && errors.officerName}
-              />
-
-            </Box>
-            <Box display='flex' justifyContent='end' mt='20px'>
-              <LoadingButton
-                type='submit'
-                color='secondary'
-                variant='contained'
-                sx={{ mt: 3, mb: 2 }}
-                loading={loading}
-                loadingPosition='start'
-                startIcon={<SendIcon />}
-              >
-                <span>Create New Entry</span>
-              </LoadingButton>
-            </Box>
-          </form>
+        <Box display='flex' mt='20px' sx={{ gridColumn: 'span 2', mb: 2 }}>
+          <LoadingButton
+            type='submit'
+            color='secondary'
+            variant='contained'
+            loading={loading}
+            disabled={loading || !formik.isValid} // Disable button during loading or if form is invalid
+            loadingPosition='start'
+            startIcon={<SendIcon />}
+          >
+            <span>Create New Entry</span>
+          </LoadingButton>
+        </Box>
+        {/* Display success or error message */}
+        {submissionMessage && (
+          <Box mt={2}>
+            {submissionMessage.startsWith('An error')
+              ? (
+                <Alert severity='error'>{submissionMessage}</Alert>
+                )
+              : (
+                <Alert severity='success'>{submissionMessage}</Alert>
+                )}
+          </Box>
         )}
-      </Formik>
+      </Box>
     </Box>
   );
-};
-
-const checkoutSchema = yup.object().shape({
-  timeIn: yup.string().required('Time In is required'),
-  // timeOut: yup.string().required('Time Out is required'),
-  loadingDate: yup.string().required('Loading Date is required'),
-  deliveryNumber: yup.string().required('Delivery Number is required'),
-  // cleanliness: yup.string().required('Cleanliness is required'),
-  numberOfSeals: yup.number().required('Number of Seals is required'),
-  sealCondition: yup.string().required('Seal Condition is required'),
-  sealingCondition: yup.string().required('Sealing Condition is required'),
-  sealsIdentification: yup.string().required('Seals Identification is required'),
-  leakages: yup.string().required('Leakages is required'),
-  fuelGauge: yup.string().required('Fuel Gauge is required'),
-  waterReservoir: yup.string().required('Water Reservoir is required'),
-  officerName: yup.string().required('Officer Name is required')
-});
-
-// Adjust the initial values to match the fields in GeneralInfo
-const initialValues = {
-  deliveryNumber: '',
-  loadingDate: '',
-  fuelGauge: '',
-  waterReservoir: '',
-  numberOfSeals: '',
-  sealCondition: '',
-  sealingCondition: '',
-  sealsIdentification: '',
-  timeIn: '',
-  timeOut: '',
-  officerName: ''
 };
 
 export default GateForm;
