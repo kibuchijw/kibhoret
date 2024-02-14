@@ -126,7 +126,7 @@ class WeighbridgeOut(APIView):
         serialized_trucks = TruckSerializer(trucks, many=True)
         total_trucks = len(serialized_trucks.data)
         all_trucks = serialized_trucks.data
-        return JsonJsonResponse({"total_trucks": total_trucks, "all_trucks": all_trucks})
+        return JsonResponse({"total_trucks": total_trucks, "all_trucks": all_trucks})
 
 # views.py
 
