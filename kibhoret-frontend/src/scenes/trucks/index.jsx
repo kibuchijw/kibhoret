@@ -61,7 +61,7 @@ const Trucks = () => {
 
   return (
     <Box m='20px'>
-      <Header title='TRUCKS' subtitle={`Trucks within the Company (${totalTrucks})`} />
+      <Header title='TRUCKS' subtitle={`All trucks ever served (${totalTrucks})`} />
       <Box
         m='40px 0 0 0'
         height='75vh'

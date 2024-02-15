@@ -79,16 +79,6 @@ const LabForm = () => {
   return (
     <Box m='20px'>
       <Header title='Lab Form' subtitle='Record lab data' />
-      {submissionMessage && (
-        <Box mt={2}>
-          {submissionMessage.startsWith('Data submitted successfully') && (
-            <Alert severity='success'>{submissionMessage}</Alert>
-          )}
-          {submissionMessage.startsWith('An error') && (
-            <Alert severity='error'>{submissionMessage}</Alert>
-          )}
-        </Box>
-      )}
       <Box
         component='form'
         onSubmit={formik.handleSubmit}
@@ -350,6 +340,16 @@ const LabForm = () => {
           >
             <span>Make New Entry</span>
           </LoadingButton>
+          {submissionMessage && (
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+              {submissionMessage.startsWith('Data submitted successfully') && (
+                <Alert severity='success'>{submissionMessage}</Alert>
+              )}
+              {submissionMessage.startsWith('An error') && (
+                <Alert severity='error'>{submissionMessage}</Alert>
+              )}
+            </Box>
+          )}
         </Box>
       </Box>
     </Box>

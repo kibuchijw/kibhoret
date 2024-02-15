@@ -56,7 +56,10 @@ const useFormData = () => {
 
         await axios.put(apiUrl, updatedData);
         setSubmissionMessage('Data submitted successfully!');
-        window.history.back();
+        // Introduce a delay before redirecting
+        setTimeout(() => {
+          window.history.back();
+        }, 8000);
       } catch (error) {
         console.error('An error occurred while submitting data:', error);
         setSubmissionMessage(

@@ -84,6 +84,8 @@ const CurrentTrucks = ({ endpoint, link }) => { // Pass the endpoint and link as
     { field: 'cab_plate', headerName: 'Cab Plate', headerAlign: 'left', align: 'left', flex: 'auto' },
     { field: 'trailer_plate', headerName: 'Trailer Plate', headerAlign: 'left', align: 'left', flex: 'auto' },
     { field: 'driver', headerName: 'Driver', headerAlign: 'left', align: 'left', flex: 'auto' }
+
+
   ];
 
   const handleViewClick = (truckId) => {

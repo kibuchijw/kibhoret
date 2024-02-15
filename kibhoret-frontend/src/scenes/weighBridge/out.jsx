@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Box, Button, TextField } from '@mui/material';
+import { Box, TextField } from '@mui/material';
+import LoadingButton from '@mui/lab/LoadingButton';
 import SendIcon from '@mui/icons-material/Send';
 import { Formik } from 'formik';
 import * as yup from 'yup';
@@ -36,7 +37,7 @@ const WeighBridgeIn = () => {
   });
 
   const initialValues = {
-    time: time_out,
+    time: '',
     last_weight: '',
     operator_name: '',
     officer_name: '',
@@ -57,8 +58,8 @@ const WeighBridgeIn = () => {
       // Calculate weight difference
       const weightDifference = firstWeight - parseFloat(values.last_weight);
 
-      // Do whatever you want with weight difference
-      console.log('Weight Difference:', weightDifference);
+      // Convert weightDifference to string
+      values.weight_difference = weightDifference.toString();
 
       // Submit form data
       handleFormSubmit(values);
@@ -88,7 +89,8 @@ const WeighBridgeIn = () => {
           touched,
           handleBlur,
           handleChange,
-          handleSubmit
+          handleSubmit,
+          isValid
         }) => (
           <form onSubmit={handleSubmit}>
             <Box
@@ -152,16 +154,18 @@ const WeighBridgeIn = () => {
                 sx={{ gridColumn: 'span 2' }}
               />
             </Box>
-            <Box display='flex' justifyContent='end' mt='20px'>
-              <Button
+            <Box display='flex' justifyContent='end' mt='20px' mb='20px'>
+              <LoadingButton
                 type='submit'
                 color='secondary'
                 variant='contained'
-                endIcon={<SendIcon />}
-                disabled={loading} // Disable button when loading
+                loading={loading}
+                disabled={loading || !isValid}
+                loadingPosition='start'
+                startIcon={<SendIcon />}
               >
-                Create New Entry
-              </Button>
+                <span>Create New Entry</span>
+              </LoadingButton>
             </Box>
           </form>
         )}

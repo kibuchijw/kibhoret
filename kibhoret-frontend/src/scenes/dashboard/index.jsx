@@ -1,13 +1,37 @@
 import { Box, Button, useTheme } from '@mui/material';
+import { useEffect, useState } from 'react';
 import { tokens } from '../../theme';
 import DownloadOutlinedIcon from '@mui/icons-material/DownloadOutlined';
 import Header from '../../components/Header';
 import StatBox from '../../components/StatBox';
 import { Link } from 'react-router-dom';
+import getTruckCountByStage from './truckCount';
 
 const Dashboard = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const [inCount, setInCount] = useState(0);
+  const [outCount, setOutCount] = useState(0);
+  const [qcCount, setQcCount] = useState(0);
+  const [tankFarmCount, setTankFarmCount] = useState(0);
+
+  useEffect(() => {
+    const fetchCounts = async () => {
+      const inCount = await getTruckCountByStage('weighbridge/in');
+      setInCount(inCount);
+
+      const outCount = await getTruckCountByStage('weighbridge/out');
+      setOutCount(outCount);
+
+      const qcCount = await getTruckCountByStage('qualitycontrol');
+      setQcCount(qcCount);
+
+      const tankFarmCount = await getTruckCountByStage('tankfarm');
+      setTankFarmCount(tankFarmCount);
+    };
+
+    fetchCounts();
+  }, []);
 
   return (
     <Box m='20px'>
@@ -66,7 +90,6 @@ const Dashboard = () => {
         >
           <Link to='/gate' style={{ display: 'contents' }}>
             <StatBox
-              title='2'
               subtitle='Gate'
               icon={
                 <img
@@ -88,9 +111,9 @@ const Dashboard = () => {
           alignItems='center'
           justifyContent='center'
         >
-          <Link to='/weighbridge/in' style={{ display: 'contents' }}>
+          <Link to='/weighbridge' style={{ display: 'contents' }}>
             <StatBox
-              title='2'
+              title={inCount}
               subtitle='IN'
               icon={
                 <img
@@ -116,7 +139,7 @@ const Dashboard = () => {
         >
           <Link to='/lab' style={{ display: 'contents' }}>
             <StatBox
-              title='2'
+              title={qcCount}
               subtitle='QC'
               icon={
                 <img
@@ -141,7 +164,7 @@ const Dashboard = () => {
         >
           <Link to='/offloading' style={{ display: 'contents' }}>
             <StatBox
-              title='3'
+              title={tankFarmCount}
               subtitle='Offloading'
               icon={
                 <img
@@ -163,9 +186,9 @@ const Dashboard = () => {
           alignItems='center'
           justifyContent='center'
         >
-          <Link to='/weighbridge/in' style={{ display: 'contents' }}>
+          <Link to='/weighbridge' style={{ display: 'contents' }}>
             <StatBox
-              title='2'
+              title={outCount}
               subtitle='OUT'
               icon={
                 <img

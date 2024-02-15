@@ -39,10 +39,10 @@ const WeighBridgeIn = () => {
           {submissionMessage.startsWith('An error')
             ? (
               <Alert severity='error'>{submissionMessage}</Alert>
-            )
+              )
             : (
               <Alert severity='success'>{submissionMessage}</Alert>
-            )}
+              )}
         </Box>
       )}
       <Formik
@@ -56,7 +56,8 @@ const WeighBridgeIn = () => {
           touched,
           handleBlur,
           handleChange,
-          handleSubmit
+          handleSubmit,
+          isValid
         }) => (
           <form onSubmit={handleSubmit}>
             <Box
@@ -146,17 +147,17 @@ const WeighBridgeIn = () => {
                 sx={{ gridColumn: 'span 2' }}
               />
             </Box>
-            <Box display='flex' justifyContent='end' mt='20px'>
+            <Box display='flex' justifyContent='end' mt='20px' mb='20px'>
               <LoadingButton
                 type='submit'
-                variant='contained'
-                sx={{ mt: 3, mb: 2 }}
                 color='secondary'
+                variant='contained'
                 loading={loading}
+                disabled={loading || !isValid}
                 loadingPosition='start'
                 startIcon={<SendIcon />}
               >
-                <span>Create New entry</span>
+                <span>Create New Entry</span>
               </LoadingButton>
             </Box>
           </form>

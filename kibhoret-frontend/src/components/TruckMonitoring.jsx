@@ -23,7 +23,7 @@ const TruckMonitoringService = ({ onNotification }) => {
   const checkNotifications = (trucks) => {
     trucks.forEach((truck) => {
       if (truck.general_info && !truck.weighbridge_in) {
-        onNotification('Truck headed to weighbridge in. Notification sent.');
+        onNotification('Truck headed to weighbridge in.');
       }
       if (truck.weighbridge_in && !truck.quality_control) {
         onNotification('Truck at weighbridge in. Proceed to quality control.');

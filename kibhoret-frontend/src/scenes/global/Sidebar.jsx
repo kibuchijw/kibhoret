@@ -98,10 +98,10 @@ const Sidebar = () => {
                   fontWeight='bold'
                   sx={{ m: '10px 0 0 0' }}
                 >
-                  QUxPTA
+                  USER
                 </Typography>
                 <Typography variant='h5' color={colors.greenAccent[500]}>
-                  Admin
+                  Role
                 </Typography>
               </Box>
             </Box>
