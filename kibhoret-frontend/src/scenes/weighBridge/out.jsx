@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, TextField } from '@mui/material';
+import { Box, TextField, Alert } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
 import SendIcon from '@mui/icons-material/Send';
 import { Formik } from 'formik';
@@ -14,6 +14,8 @@ const WeighBridgeIn = () => {
   const isNonMobile = useMediaQuery('(min-width:600px)');
   const {
     id,
+    submissionMessage,
+    setSubmissionMessage,
     time_out,
     setTimeOut,
     handleFormSubmit,
@@ -77,6 +79,16 @@ const WeighBridgeIn = () => {
           title='WEIGHBRIDGE RECORDS'
           subtitle='Record a new truck exit'
         />
+        {submissionMessage && (
+          <Box mt={2}>
+            {submissionMessage.startsWith('Data submitted successfully') && (
+              <Alert severity='success'>{submissionMessage}</Alert>
+            )}
+            {submissionMessage.startsWith('An error') && (
+              <Alert severity='error'>{submissionMessage}</Alert>
+            )}
+          </Box>
+        )}
       </Link>
       <Formik
         onSubmit={handleSubmit}
