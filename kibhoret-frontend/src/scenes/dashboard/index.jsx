@@ -25,6 +25,7 @@ const Dashboard = () => {
 
       const qcCount = await getTruckCountByStage('qualitycontrol');
       setQcCount(qcCount);
+      console.log(qcCount);
 
       const tankFarmCount = await getTruckCountByStage('tankfarm');
       setTankFarmCount(tankFarmCount);

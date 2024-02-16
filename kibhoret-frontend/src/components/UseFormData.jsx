@@ -59,7 +59,7 @@ const useFormData = () => {
         // Introduce a delay before redirecting
         setTimeout(() => {
           window.history.back();
-        }, 8000);
+        }, 6000);
       } catch (error) {
         console.error('An error occurred while submitting data:', error);
         setSubmissionMessage(

@@ -101,9 +101,9 @@ const Topbar = ({ notifications }) => {
           {notifications.length > 0
             ? (
                 notifications.map((notification, index) => (
-                <MenuItem key={index} onClick={handleClose}>
-                  {notification}
-                </MenuItem>
+                  <MenuItem key={index} onClick={handleClose}>
+                    {notification}
+                  </MenuItem>
                 ))
               )
             : (

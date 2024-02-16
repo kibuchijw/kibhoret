@@ -85,7 +85,6 @@ const CurrentTrucks = ({ endpoint, link }) => { // Pass the endpoint and link as
     { field: 'trailer_plate', headerName: 'Trailer Plate', headerAlign: 'left', align: 'left', flex: 'auto' },
     { field: 'driver', headerName: 'Driver', headerAlign: 'left', align: 'left', flex: 'auto' }
 
-
   ];
 
   const handleViewClick = (truckId) => {
@@ -119,7 +118,7 @@ const CurrentTrucks = ({ endpoint, link }) => { // Pass the endpoint and link as
       <Dialog open={openDialog} onClose={handleCloseDialog}>
         <DialogTitle>Truck Details</DialogTitle>
         <DialogContent>
-          {selectedTruck && <TruckDetails selectedTruck={selectedTruck} />} {/* Use TruckDetails component */}
+          {selectedTruck && <TruckDetails selectedTruck={selectedTruck} />}
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseDialog} color='primary'>Close</Button>
