@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 const TruckMonitoringService = ({ onNotification }) => {
   const [trucks, setTrucks] = useState([]);
@@ -7,11 +7,13 @@ const TruckMonitoringService = ({ onNotification }) => {
   useEffect(() => {
     const fetchTrucks = async () => {
       try {
-        const response = await axios.get('http://127.0.0.1:8000/api/trucks');
+        const response = await axios.get(
+          "http://54.198.64.165:8000/api/trucks"
+        );
         setTrucks(response.data.all_trucks);
         checkNotifications(response.data.all_trucks);
       } catch (error) {
-        console.error('Error fetching trucks:', error);
+        console.error("Error fetching trucks:", error);
       }
     };
 
@@ -23,19 +25,21 @@ const TruckMonitoringService = ({ onNotification }) => {
   const checkNotifications = (trucks) => {
     trucks.forEach((truck) => {
       if (truck.general_info && !truck.weighbridge_in) {
-        onNotification('Truck headed to weighbridge in.');
+        onNotification("Truck headed to weighbridge in.");
       }
       if (truck.weighbridge_in && !truck.quality_control) {
-        onNotification('Truck at weighbridge in. Proceed to quality control.');
+        onNotification("Truck at weighbridge in. Proceed to quality control.");
       }
       if (truck.quality_control && !truck.tankfarm) {
-        onNotification('Truck passed quality control. Proceed to offloading.');
+        onNotification("Truck passed quality control. Proceed to offloading.");
       }
       if (truck.tankfarm && !truck.weighbridge_out) {
-        onNotification('Truck at offloading. Head to weighbridge out for second weighing.');
+        onNotification(
+          "Truck at offloading. Head to weighbridge out for second weighing."
+        );
       }
       if (truck.weighbridge_out) {
-        onNotification('Truck ready to exit. Proceed to the gate.');
+        onNotification("Truck ready to exit. Proceed to the gate.");
       }
     });
   };

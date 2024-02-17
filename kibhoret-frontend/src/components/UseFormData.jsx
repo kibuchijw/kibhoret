@@ -1,34 +1,34 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 const useFormData = () => {
-  const [id, setId] = useState('');
-  const [submissionMessage, setSubmissionMessage] = useState('');
+  const [id, setId] = useState("");
+  const [submissionMessage, setSubmissionMessage] = useState("");
   const [time_in, setTimeIn] = useState(new Date().toISOString());
-  const [time_out, setTimeOut] = useState('');
+  const [time_out, setTimeOut] = useState("");
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const storedTruckId = localStorage.getItem('selectedTruckId');
-    console.log('Stored Truck ID:', storedTruckId);
+    const storedTruckId = localStorage.getItem("selectedTruckId");
+    console.log("Stored Truck ID:", storedTruckId);
     if (storedTruckId) {
       setId(storedTruckId);
     }
   }, []);
 
   const handleFormSubmit = async (values) => {
-    console.log('Starting form submission...');
+    console.log("Starting form submission...");
     if (id) {
-      const apiUrl = `http://127.0.0.1:8000/api/truck/${id}/`;
-      console.log('API URL:', apiUrl);
+      const apiUrl = `http://54.198.64.165:8000/api/truck/${id}/`;
+      console.log("API URL:", apiUrl);
       try {
-        console.log('Submitting data...');
+        console.log("Submitting data...");
         setLoading(true);
         const response = await axios.get(apiUrl);
-        console.log('Response:', response);
+        console.log("Response:", response);
         const existingData = response.data;
 
-        let fieldNameToUpdate = '';
+        let fieldNameToUpdate = "";
 
         // Loop through the keys in existingData to find the first null field
         for (const key in existingData) {
@@ -38,38 +38,38 @@ const useFormData = () => {
           }
         }
 
-        if (fieldNameToUpdate === '') {
-          console.error('No null field found in existing data.');
+        if (fieldNameToUpdate === "") {
+          console.error("No null field found in existing data.");
           return;
         }
 
         const formattedValues = {
           ...values,
           time_in,
-          time_out: new Date().toISOString()
+          time_out: new Date().toISOString(),
         };
 
         const updatedData = {
           ...existingData,
-          [fieldNameToUpdate]: formattedValues
+          [fieldNameToUpdate]: formattedValues,
         };
 
         await axios.put(apiUrl, updatedData);
-        setSubmissionMessage('Data submitted successfully!');
+        setSubmissionMessage("Data submitted successfully!");
         // Introduce a delay before redirecting
         setTimeout(() => {
           window.history.back();
         }, 6000);
       } catch (error) {
-        console.error('An error occurred while submitting data:', error);
+        console.error("An error occurred while submitting data:", error);
         setSubmissionMessage(
-          'An error occurred while submitting data, Please try again.'
+          "An error occurred while submitting data, Please try again."
         );
       } finally {
         setLoading(false);
       }
     } else {
-      console.error('Truck ID not available.');
+      console.error("Truck ID not available.");
     }
   };
 
@@ -84,7 +84,7 @@ const useFormData = () => {
     setTimeOut,
     loading,
     setLoading,
-    handleFormSubmit
+    handleFormSubmit,
   };
 };
 
